@@ -57,6 +57,7 @@ services:
       TRELLO_API_KEY: $TRELLO_API_KEY
       TRELLO_TOKEN: $TRELLO_TOKEN
       TRELLO_ALERTS_LIST_ID: $TRELLO_ALERTS_LIST_ID
+
   td-ui:
     image: node:10.14-alpine
     working_dir: /usr/src/front
@@ -137,6 +138,18 @@ services:
       - ./etl/code/embulk:/usr/local/airflow/embulk
       - ./etl/code/sql:/usr/local/airflow/sql
       - ./etl/code/tests:/usr/local/airflow/tests
+  td-stats:
+    image: td-stats
+    build:
+      context: ./stats
+      dockerfile: Dockerfile
+    command:  gunicorn -b 0.0.0.0:8000 --reload flask_app.app
+    environment:
+      POSTGRES_PRISMA_CONN: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@postgres:5432/prisma
+    ports:
+      - 8000:8000
+    volumes:
+      - ./stats/flask_app:/app/flask_app
 
 volumes:
   postgres:
