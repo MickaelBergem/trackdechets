@@ -11,7 +11,7 @@ services:
     restart: always
 
   cachet:
-    image: cachethq/docker:2.3.12
+    image: cachethq/docker:2.3.15
     ports:
       - 81:8000
     env_file:
