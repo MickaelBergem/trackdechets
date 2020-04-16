@@ -8,6 +8,7 @@ import { mergeValidationRules } from "./common/middlewares/schema-validation";
 const typesArray = fileLoader(`${__dirname}/**/*.graphql`, {
   recursive: true
 });
+
 const typeDefs = mergeTypes(typesArray, { all: true });
 
 const resolversArray = fileLoader(`${__dirname}/**/resolvers.ts`, {
