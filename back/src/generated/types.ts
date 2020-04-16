@@ -132,6 +132,10 @@ export type CompanyPrivate = {
    * associé à cet établissement (le cas échéant)
    */
   installation?: Maybe<Installation>;
+  /** Récépissé transporteur (le cas échéant, pour les profils transporteur) */
+  transporterReceipt?: Maybe<TransporterReceipt>;
+  /** Récépissé négociant (le cas échéant, pour les profils transporteur) */
+  traderReceipt?: Maybe<TraderReceipt>;
 };
 
 /** Information sur un établissement accessible publiquement */
@@ -230,6 +234,26 @@ export enum Consistence {
   /** Gazeux */
   Gaseous = 'GASEOUS'
 }
+
+/** Payload de création d'un récépissé négociant */
+export type CreateTraderReceiptInput = {
+  /** Numéro de récépissé négociant */
+  receiptNumber: Scalars['String'];
+  /** Limite de validatié du récépissé */
+  validityLimit: Scalars['DateTime'];
+  /** Département ayant enregistré la déclaration */
+  department: Scalars['String'];
+};
+
+/** Payload de création d'un récépissé transporteur */
+export type CreateTransporterReceiptInput = {
+  /** Numéro de récépissé transporteur */
+  receiptNumber: Scalars['String'];
+  /** Limite de validatié du récépissé */
+  validityLimit: Scalars['DateTime'];
+  /** Département ayant enregistré la déclaration */
+  department: Scalars['String'];
+};
 
 
 /** Représente une ligne dans une déclaration GEREP */
@@ -670,8 +694,18 @@ export type Mutation = {
    * Édite les informations d'un établissement
    */
   updateCompany?: Maybe<CompanyPrivate>;
+  /**
+   * USAGE INTERNE
+   * Édite les informations d'un récépissé négociant
+   */
+  updateTraderReceipt?: Maybe<TraderReceipt>;
   /** Met à jour la plaque d'immatriculation ou le champ libre du transporteur */
   updateTransporterFields?: Maybe<Form>;
+  /**
+   * USAGE INTERNE
+   * Édite les informations d'un récépissé transporteur
+   */
+  updateTransporterReceipt?: Maybe<TransporterReceipt>;
 };
 
 
@@ -825,10 +859,20 @@ export type MutationUpdateCompanyArgs = {
 };
 
 
+export type MutationUpdateTraderReceiptArgs = {
+  traderReceiptInput?: Maybe<UpdateTraderReceiptInput>;
+};
+
+
 export type MutationUpdateTransporterFieldsArgs = {
   id: Scalars['ID'];
   transporterNumberPlate?: Maybe<Scalars['String']>;
   transporterCustomInfo?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationUpdateTransporterReceiptArgs = {
+  transporterReceiptInput?: Maybe<UpdateTransporterReceiptInput>;
 };
 
 /** Destination ultérieure prévue (case 12) */
@@ -878,6 +922,10 @@ export type PrivateCompanyInput = {
    * de l'utilisateur à l'établissement
    */
   documentKeys?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** Récipissé transporteur (le cas échéant, pour les profils transporteur) */
+  transporterReceipt?: Maybe<CreateTransporterReceiptInput>;
+  /** Récipissé négociant (le cas échéant, pour les profils négociant) */
+  traderReceipt?: Maybe<CreateTraderReceiptInput>;
 };
 
 /** Payload de traitement d'un BSD */
@@ -1271,6 +1319,18 @@ export type TraderInput = {
   company?: Maybe<CompanyInput>;
 };
 
+/** Récépissé négociant */
+export type TraderReceipt = {
+   __typename?: 'TraderReceipt';
+  id: Scalars['ID'];
+  /** Numéro de récépissé négociant */
+  receiptNumber: Scalars['String'];
+  /** Limite de validatié du récépissé */
+  validityLimit: Scalars['DateTime'];
+  /** Département ayant enregistré la déclaration */
+  department: Scalars['String'];
+};
+
 /** Collecteur - transporteur (case 8) */
 export type Transporter = {
    __typename?: 'Transporter';
@@ -1306,6 +1366,18 @@ export type TransporterInput = {
   company?: Maybe<CompanyInput>;
 };
 
+/** Récépissé transporteur */
+export type TransporterReceipt = {
+   __typename?: 'TransporterReceipt';
+  id: Scalars['ID'];
+  /** Numéro de récépissé transporteur */
+  receiptNumber: Scalars['String'];
+  /** Limite de validatié du récépissé */
+  validityLimit: Scalars['DateTime'];
+  /** Département ayant enregistré la déclaration */
+  department: Scalars['String'];
+};
+
 /** Payload de signature d'un BSD par un transporteur */
 export type TransporterSignatureFormInput = {
   /** Date de l'envoi du déchet par l'émetteur (case 9) */
@@ -1324,6 +1396,30 @@ export type TransporterSignatureFormInput = {
   quantity: Scalars['Float'];
   /** Code ONU */
   onuCode?: Maybe<Scalars['String']>;
+};
+
+/** Payload d'édition d'un récépissé transporteur */
+export type UpdateTraderReceiptInput = {
+  /** The id of the trader receipt to modify */
+  id: Scalars['ID'];
+  /** Numéro de récépissé transporteur */
+  receiptNumber?: Maybe<Scalars['String']>;
+  /** Limite de validatié du récépissé */
+  validityLimit?: Maybe<Scalars['DateTime']>;
+  /** Département ayant enregistré la déclaration */
+  department?: Maybe<Scalars['String']>;
+};
+
+/** Payload d'édition d'un récépissé transporteur */
+export type UpdateTransporterReceiptInput = {
+  /** The id of the transporter receipt to modify */
+  id: Scalars['ID'];
+  /** Numéro de récépissé transporteur */
+  receiptNumber?: Maybe<Scalars['String']>;
+  /** Limite de validatié du récépissé */
+  validityLimit?: Maybe<Scalars['DateTime']>;
+  /** Département ayant enregistré la déclaration */
+  department?: Maybe<Scalars['String']>;
 };
 
 /** Lien d'upload */
