@@ -61,6 +61,23 @@ type Mutation {
     givenName: String
   ): CompanyPrivate
 
+
+  """
+  USAGE INTERNE
+  Édite les informations d'un récépissé transporteur
+  """
+  updateTransporterReceipt(
+    transporterReceiptInput: UpdateTransporterReceiptInput
+  ): TransporterReceipt
+
+  """
+  USAGE INTERNE
+  Édite les informations d'un récépissé négociant
+  """
+  updateTraderReceipt(
+    traderReceiptInput: UpdateTraderReceiptInput
+  ): TraderReceipt
+
   """
   USAGE INTERNE
   Rattache un établissement à l'utilisateur authentifié
@@ -164,6 +181,12 @@ type CompanyPrivate {
   associé à cet établissement (le cas échéant)
   """
   installation: Installation
+
+  "Récépissé transporteur (le cas échéant, pour les profils transporteur)"
+  transporterReceipt: TransporterReceipt
+
+  "Récépissé négociant (le cas échéant, pour les profils transporteur)"
+  traderReceipt: TraderReceipt
 }
 
 "Information sur un établissement accessible publiquement"
@@ -213,6 +236,7 @@ type CompanyPublic {
   isRegistered: Boolean
 
 }
+
 
 "Information sur un établissement accessible publiquement en recherche"
 type CompanySearchResult {
@@ -301,6 +325,147 @@ type UploadLink {
   key: String
 }
 
+"""
+Récépissé transporteur
+"""
+type TransporterReceipt {
+
+  id: ID!
+
+  """
+  Numéro de récépissé transporteur
+  """
+  receiptNumber: String!
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime!
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String!
+}
+
+"""
+Récépissé négociant
+"""
+type TraderReceipt {
+
+  id: ID!
+
+  """
+  Numéro de récépissé négociant
+  """
+  receiptNumber: String!
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime!
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String!
+}
+
+
+"""
+Payload de création d'un récépissé transporteur
+"""
+input CreateTransporterReceiptInput {
+
+  """
+  Numéro de récépissé transporteur
+  """
+  receiptNumber: String!
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime!
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String!
+}
+
+"""
+Payload de création d'un récépissé négociant
+"""
+input CreateTraderReceiptInput {
+
+  """
+  Numéro de récépissé négociant
+  """
+  receiptNumber: String!
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime!
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String!
+}
+
+"""
+Payload d'édition d'un récépissé transporteur
+"""
+input UpdateTransporterReceiptInput {
+
+  """
+  The id of the transporter receipt to modify
+  """
+  id: ID!
+
+  """
+  Numéro de récépissé transporteur
+  """
+  receiptNumber: String
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String
+}
+
+"""
+Payload d'édition d'un récépissé transporteur
+"""
+input UpdateTraderReceiptInput {
+
+  """
+  The id of the trader receipt to modify
+  """
+  id: ID!
+
+  """
+  Numéro de récépissé transporteur
+  """
+  receiptNumber: String
+
+  """
+  Limite de validatié du récépissé
+  """
+  validityLimit: DateTime
+
+  """
+  Département ayant enregistré la déclaration
+  """
+  department: String
+}
+
 "Payload permettant le rattachement d'un établissement à un utilisateur"
 input PrivateCompanyInput {
   "SIRET de l'établissement"
@@ -323,6 +488,16 @@ input PrivateCompanyInput {
   de l'utilisateur à l'établissement
   """
   documentKeys: [String]
+
+  """
+  Récipissé transporteur (le cas échéant, pour les profils transporteur)
+  """
+  transporterReceipt: CreateTransporterReceiptInput
+
+  """
+  Récipissé négociant (le cas échéant, pour les profils négociant)
+  """
+  traderReceipt: CreateTraderReceiptInput
 }
 
 "Information sur utilisateur au sein d'un établissement"

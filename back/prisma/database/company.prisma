@@ -16,6 +16,18 @@ enum CompanyType {
   TRADER
 }
 
+type TransporterReceipt {
+  receiptNumber: String!
+  validityLimit: DateTime!
+  department: String!
+}
+
+type TraderReceipt {
+  receiptNumber: String!
+  validityLimit: DateTime!
+  department: String!
+}
+
 type Company {
   id: ID! @id
   siret: String! @unique
@@ -39,6 +51,9 @@ type Company {
   website: String
 
   documentKeys: [String!] @scalarList(strategy: RELATION)
+
+  transporterReceipt: TransporterReceipt
+  traderReceipt: TraderReceipt
 }
 
 """
