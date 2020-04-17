@@ -61,7 +61,6 @@ type Mutation {
     givenName: String
   ): CompanyPrivate
 
-
   """
   USAGE INTERNE
   Édite les informations d'un récépissé transporteur
@@ -182,10 +181,14 @@ type CompanyPrivate {
   """
   installation: Installation
 
-  "Récépissé transporteur (le cas échéant, pour les profils transporteur)"
+  """
+  Récépissé transporteur (le cas échéant, pour les profils transporteur)
+  """
   transporterReceipt: TransporterReceipt
 
-  "Récépissé négociant (le cas échéant, pour les profils transporteur)"
+  """
+  Récépissé négociant (le cas échéant, pour les profils transporteur)
+  """
   traderReceipt: TraderReceipt
 }
 
@@ -236,7 +239,6 @@ type CompanyPublic {
   isRegistered: Boolean
 
 }
-
 
 "Information sur un établissement accessible publiquement en recherche"
 type CompanySearchResult {
@@ -329,7 +331,6 @@ type UploadLink {
 Récépissé transporteur
 """
 type TransporterReceipt {
-
   id: ID!
 
   """
@@ -352,7 +353,6 @@ type TransporterReceipt {
 Récépissé négociant
 """
 type TraderReceipt {
-
   id: ID!
 
   """
@@ -371,12 +371,10 @@ type TraderReceipt {
   department: String!
 }
 
-
 """
 Payload de création d'un récépissé transporteur
 """
 input CreateTransporterReceiptInput {
-
   """
   Numéro de récépissé transporteur
   """
@@ -397,7 +395,6 @@ input CreateTransporterReceiptInput {
 Payload de création d'un récépissé négociant
 """
 input CreateTraderReceiptInput {
-
   """
   Numéro de récépissé négociant
   """
@@ -418,7 +415,6 @@ input CreateTraderReceiptInput {
 Payload d'édition d'un récépissé transporteur
 """
 input UpdateTransporterReceiptInput {
-
   """
   The id of the transporter receipt to modify
   """
@@ -444,7 +440,6 @@ input UpdateTransporterReceiptInput {
 Payload d'édition d'un récépissé transporteur
 """
 input UpdateTraderReceiptInput {
-
   """
   The id of the trader receipt to modify
   """

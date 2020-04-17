@@ -21,7 +21,23 @@ export default {
         ),
         codeNaf: string().nullable(true),
         companyName: string().nullable(true),
-        documentKeys: array().of(string())
+        documentKeys: array().of(string()),
+        transporterReceipt: object()
+          .notRequired()
+          .nullable()
+          .shape({
+            receiptNumber: string(),
+            validityLimit: string(),
+            department: string()
+          }),
+        traderReceipt: object()
+          .notRequired()
+          .nullable()
+          .shape({
+            receiptNumber: string(),
+            validityLimit: string(),
+            department: string()
+          })
       })
     }),
     createUploadLink: object({

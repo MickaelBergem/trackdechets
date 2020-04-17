@@ -1,13 +1,23 @@
 import { sendMail } from "../../common/mails.helper";
-import { GraphQLContext } from "../../types";
 import { randomNumber } from "../../utils";
 import { UserInputError } from "apollo-server-express";
-import { User, Company, prisma } from "../../generated/prisma-client";
+import {
+  User,
+  Company,
+  CompanyCreateInput,
+  prisma
+} from "../../generated/prisma-client";
+import { PrivateCompanyInput } from "../../generated/types";
 
+/**
+ * Create a new company and associate it to a user
+ * who becomes the first admin of the company
+ * @param companyInput
+ * @param userId
+ */
 export default async function createCompany(
-  _,
-  { companyInput },
-  context: GraphQLContext
+  companyInput: PrivateCompanyInput,
+  user: User
 ) {
   const trimedSiret = companyInput.siret.replace(/\s+/g, "");
 
@@ -28,7 +38,7 @@ export default async function createCompany(
   }
 
   const companyAssociationPromise = prisma.createCompanyAssociation({
-    user: { connect: { id: context.user.id } },
+    user: { connect: { id: user.id } },
     company: {
       create: {
         siret: trimedSiret,
@@ -36,7 +46,13 @@ export default async function createCompany(
         gerepId: companyInput.gerepId,
         name: companyInput.companyName,
         companyTypes: { set: companyInput.companyTypes },
-        securityCode: randomNumber(4)
+        securityCode: randomNumber(4),
+        transporterReceipt: companyInput.transporterReceipt
+          ? { create: companyInput.transporterReceipt }
+          : null,
+        traderReceipt: companyInput.traderReceipt
+          ? { create: companyInput.traderReceipt }
+          : null
       }
     },
     role: "ADMIN"
@@ -44,7 +60,7 @@ export default async function createCompany(
 
   const company = await companyAssociationPromise.company();
 
-  await warnIfUserCreatesTooManyCompanies(context.user, company);
+  await warnIfUserCreatesTooManyCompanies(user, company);
 
   return company;
 }

@@ -24,7 +24,10 @@ export default {
     userRole: (parent, _, context: GraphQLContext) => {
       const userId = context.user.id;
       return getUserRole(userId, parent.siret);
-    }
+    },
+    transporterReceipt: parent =>
+      prisma.company({ id: parent.id }).transporterReceipt(),
+    traderReceipt: parent => prisma.company({ id: parent.id }).traderReceipt()
   },
   CompanyMember: {
     isMe: (parent, _, context: GraphQLContext) => {
@@ -110,7 +113,8 @@ export default {
   Mutation: {
     renewSecurityCode: (_, { siret }) => renewSecurityCode(siret),
     updateCompany: (_, payload) => updateCompany(payload),
-    createCompany,
+    createCompany: (_, { companyInput }, context: GraphQLContext) =>
+      createCompany(companyInput, context.user),
     createUploadLink
   }
 };
