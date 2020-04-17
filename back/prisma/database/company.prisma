@@ -17,12 +17,14 @@ enum CompanyType {
 }
 
 type TransporterReceipt {
+  id: ID! @id
   receiptNumber: String!
   validityLimit: DateTime!
   department: String!
 }
 
 type TraderReceipt {
+  id: ID! @id
   receiptNumber: String!
   validityLimit: DateTime!
   department: String!
