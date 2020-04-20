@@ -238,21 +238,21 @@ export enum Consistence {
 /** Payload de création d'un récépissé négociant */
 export type CreateTraderReceiptInput = {
   /** Numéro de récépissé négociant */
-  receiptNumber: Scalars['String'];
+  receiptNumber?: Maybe<Scalars['String']>;
   /** Limite de validatié du récépissé */
-  validityLimit: Scalars['DateTime'];
+  validityLimit?: Maybe<Scalars['DateTime']>;
   /** Département ayant enregistré la déclaration */
-  department: Scalars['String'];
+  department?: Maybe<Scalars['String']>;
 };
 
 /** Payload de création d'un récépissé transporteur */
 export type CreateTransporterReceiptInput = {
   /** Numéro de récépissé transporteur */
-  receiptNumber: Scalars['String'];
+  receiptNumber?: Maybe<Scalars['String']>;
   /** Limite de validatié du récépissé */
-  validityLimit: Scalars['DateTime'];
+  validityLimit?: Maybe<Scalars['DateTime']>;
   /** Département ayant enregistré la déclaration */
-  department: Scalars['String'];
+  department?: Maybe<Scalars['String']>;
 };
 
 
@@ -1324,11 +1324,11 @@ export type TraderReceipt = {
    __typename?: 'TraderReceipt';
   id: Scalars['ID'];
   /** Numéro de récépissé négociant */
-  receiptNumber: Scalars['String'];
+  receiptNumber?: Maybe<Scalars['String']>;
   /** Limite de validatié du récépissé */
-  validityLimit: Scalars['DateTime'];
+  validityLimit?: Maybe<Scalars['DateTime']>;
   /** Département ayant enregistré la déclaration */
-  department: Scalars['String'];
+  department?: Maybe<Scalars['String']>;
 };
 
 /** Collecteur - transporteur (case 8) */
@@ -1371,11 +1371,11 @@ export type TransporterReceipt = {
    __typename?: 'TransporterReceipt';
   id: Scalars['ID'];
   /** Numéro de récépissé transporteur */
-  receiptNumber: Scalars['String'];
+  receiptNumber?: Maybe<Scalars['String']>;
   /** Limite de validatié du récépissé */
-  validityLimit: Scalars['DateTime'];
+  validityLimit?: Maybe<Scalars['DateTime']>;
   /** Département ayant enregistré la déclaration */
-  department: Scalars['String'];
+  department?: Maybe<Scalars['String']>;
 };
 
 /** Payload de signature d'un BSD par un transporteur */

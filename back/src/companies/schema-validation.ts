@@ -26,17 +26,29 @@ export default {
           .notRequired()
           .nullable()
           .shape({
-            receiptNumber: string(),
-            validityLimit: string(),
+            receiptNumber: string()
+              .notRequired()
+              .nullable(),
+            validityLimit: string()
+              .notRequired()
+              .nullable(),
             department: string()
+              .notRequired()
+              .nullable()
           }),
         traderReceipt: object()
           .notRequired()
           .nullable()
           .shape({
-            receiptNumber: string(),
-            validityLimit: string(),
+            receiptNumber: string()
+              .notRequired()
+              .nullable(),
+            validityLimit: string()
+              .notRequired()
+              .nullable(),
             department: string()
+              .notRequired()
+              .nullable()
           })
       })
     }),

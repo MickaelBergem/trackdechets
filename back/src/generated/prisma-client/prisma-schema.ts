@@ -6202,9 +6202,9 @@ input TemporaryStorageDetailWhereUniqueInput {
 
 type TraderReceipt {
   id: ID!
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 type TraderReceiptConnection {
@@ -6215,9 +6215,9 @@ type TraderReceiptConnection {
 
 input TraderReceiptCreateInput {
   id: ID
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 input TraderReceiptCreateOneInput {
@@ -6243,9 +6243,9 @@ enum TraderReceiptOrderByInput {
 
 type TraderReceiptPreviousValues {
   id: ID!
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 type TraderReceiptSubscriptionPayload {
@@ -6360,9 +6360,9 @@ input TraderReceiptWhereUniqueInput {
 
 type TransporterReceipt {
   id: ID!
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 type TransporterReceiptConnection {
@@ -6373,9 +6373,9 @@ type TransporterReceiptConnection {
 
 input TransporterReceiptCreateInput {
   id: ID
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 input TransporterReceiptCreateOneInput {
@@ -6401,9 +6401,9 @@ enum TransporterReceiptOrderByInput {
 
 type TransporterReceiptPreviousValues {
   id: ID!
-  receiptNumber: String!
-  validityLimit: DateTime!
-  department: String!
+  receiptNumber: String
+  validityLimit: DateTime
+  department: String
 }
 
 type TransporterReceiptSubscriptionPayload {

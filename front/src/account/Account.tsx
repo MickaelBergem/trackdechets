@@ -67,7 +67,7 @@ export default withRouter(function Account({ match }: RouteComponentProps) {
           )}
         />
         <Route path={`${match.path}/companies/new`}>
-          <AccountContentWrapper title="Création d'un nouvel établissement">
+          <AccountContentWrapper title="Créer un établissement">
             <AccountCompanyAdd />
           </AccountContentWrapper>
         </Route>

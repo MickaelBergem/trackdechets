@@ -237,7 +237,6 @@ type CompanyPublic {
   Si oui on non cet établissement est inscrit sur la plateforme Trackdéchets
   """
   isRegistered: Boolean
-
 }
 
 "Information sur un établissement accessible publiquement en recherche"
@@ -336,17 +335,17 @@ type TransporterReceipt {
   """
   Numéro de récépissé transporteur
   """
-  receiptNumber: String!
+  receiptNumber: String
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime!
+  validityLimit: DateTime
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String!
+  department: String
 }
 
 """
@@ -358,17 +357,17 @@ type TraderReceipt {
   """
   Numéro de récépissé négociant
   """
-  receiptNumber: String!
+  receiptNumber: String
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime!
+  validityLimit: DateTime
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String!
+  department: String
 }
 
 """
@@ -378,17 +377,17 @@ input CreateTransporterReceiptInput {
   """
   Numéro de récépissé transporteur
   """
-  receiptNumber: String!
+  receiptNumber: String
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime!
+  validityLimit: DateTime
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String!
+  department: String
 }
 
 """
@@ -398,17 +397,17 @@ input CreateTraderReceiptInput {
   """
   Numéro de récépissé négociant
   """
-  receiptNumber: String!
+  receiptNumber: String
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime!
+  validityLimit: DateTime
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String!
+  department: String
 }
 
 """
