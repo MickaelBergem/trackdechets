@@ -7,7 +7,7 @@ import {
   CompanyCreateInput,
   prisma
 } from "../../generated/prisma-client";
-import { PrivateCompanyInput } from "../../generated/types";
+import { PrivateCompanyInput, CompanyType } from "../../generated/types";
 
 /**
  * Create a new company and associate it to a user
@@ -19,7 +19,17 @@ export default async function createCompany(
   companyInput: PrivateCompanyInput,
   user: User
 ) {
-  const trimedSiret = companyInput.siret.replace(/\s+/g, "");
+  const {
+    siret,
+    codeNaf,
+    gerepId,
+    companyName: name,
+    companyTypes,
+    transporterReceiptId,
+    traderReceiptId
+  } = companyInput;
+
+  const trimedSiret = siret.replace(/\s+/g, "");
 
   const existingCompany = await prisma.$exists
     .company({
@@ -37,23 +47,31 @@ export default async function createCompany(
     );
   }
 
+  const companyCreateInput: CompanyCreateInput = {
+    siret: trimedSiret,
+    codeNaf,
+    gerepId,
+    name,
+    companyTypes: { set: companyTypes },
+    securityCode: randomNumber(4)
+  };
+
+  if (!!transporterReceiptId) {
+    companyCreateInput.transporterReceipt = {
+      connect: { id: transporterReceiptId }
+    };
+  }
+
+  if (!!traderReceiptId) {
+    companyCreateInput.traderReceipt = {
+      connect: { id: traderReceiptId }
+    };
+  }
+
   const companyAssociationPromise = prisma.createCompanyAssociation({
     user: { connect: { id: user.id } },
     company: {
-      create: {
-        siret: trimedSiret,
-        codeNaf: companyInput.codeNaf,
-        gerepId: companyInput.gerepId,
-        name: companyInput.companyName,
-        companyTypes: { set: companyInput.companyTypes },
-        securityCode: randomNumber(4),
-        transporterReceipt: companyInput.transporterReceipt
-          ? { create: companyInput.transporterReceipt }
-          : null,
-        traderReceipt: companyInput.traderReceipt
-          ? { create: companyInput.traderReceipt }
-          : null
-      }
+      create: companyCreateInput
     },
     role: "ADMIN"
   });

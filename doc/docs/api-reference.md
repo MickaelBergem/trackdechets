@@ -362,6 +362,36 @@ Rattache un établissement à l'utilisateur authentifié
 <td></td>
 </tr>
 <tr>
+<td colspan="2" valign="top"><strong>createTraderReceipt</strong></td>
+<td valign="top"><a href="#traderreceipt">TraderReceipt</a></td>
+<td>
+
+USAGE INTERNE
+Crée un récépissé transporteur
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">input</td>
+<td valign="top"><a href="#createtraderreceiptinput">CreateTraderReceiptInput</a></td>
+<td></td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>createTransporterReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+USAGE INTERNE
+Crée un récépissé transporteur
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">input</td>
+<td valign="top"><a href="#createtransporterreceiptinput">CreateTransporterReceiptInput</a></td>
+<td></td>
+</tr>
+<tr>
 <td colspan="2" valign="top"><strong>createUploadLink</strong></td>
 <td valign="top"><a href="#uploadlink">UploadLink</a></td>
 <td>
@@ -913,7 +943,7 @@ USAGE INTERNE
 </td>
 </tr>
 <tr>
-<td colspan="2" align="right" valign="top">traderReceiptInput</td>
+<td colspan="2" align="right" valign="top">input</td>
 <td valign="top"><a href="#updatetraderreceiptinput">UpdateTraderReceiptInput</a></td>
 <td></td>
 </tr>
@@ -964,7 +994,7 @@ USAGE INTERNE
 </td>
 </tr>
 <tr>
-<td colspan="2" align="right" valign="top">transporterReceiptInput</td>
+<td colspan="2" align="right" valign="top">input</td>
 <td valign="top"><a href="#updatetransporterreceiptinput">UpdateTransporterReceiptInput</a></td>
 <td></td>
 </tr>
@@ -2942,7 +2972,7 @@ Récépissé négociant
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>receiptNumber</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Numéro de récépissé négociant
@@ -2951,7 +2981,7 @@ Numéro de récépissé négociant
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>validityLimit</strong></td>
-<td valign="top"><a href="#datetime">DateTime</a></td>
+<td valign="top"><a href="#datetime">DateTime</a>!</td>
 <td>
 
 Limite de validatié du récépissé
@@ -2960,7 +2990,7 @@ Limite de validatié du récépissé
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>department</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Département ayant enregistré la déclaration
@@ -3071,7 +3101,7 @@ Récépissé transporteur
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>receiptNumber</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Numéro de récépissé transporteur
@@ -3080,7 +3110,7 @@ Numéro de récépissé transporteur
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>validityLimit</strong></td>
-<td valign="top"><a href="#datetime">DateTime</a></td>
+<td valign="top"><a href="#datetime">DateTime</a>!</td>
 <td>
 
 Limite de validatié du récépissé
@@ -3089,7 +3119,7 @@ Limite de validatié du récépissé
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>department</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Département ayant enregistré la déclaration
@@ -3528,7 +3558,7 @@ Payload de création d'un récépissé négociant
 <tbody>
 <tr>
 <td colspan="2" valign="top"><strong>receiptNumber</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Numéro de récépissé négociant
@@ -3537,7 +3567,7 @@ Numéro de récépissé négociant
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>validityLimit</strong></td>
-<td valign="top"><a href="#datetime">DateTime</a></td>
+<td valign="top"><a href="#datetime">DateTime</a>!</td>
 <td>
 
 Limite de validatié du récépissé
@@ -3546,7 +3576,7 @@ Limite de validatié du récépissé
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>department</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Département ayant enregistré la déclaration
@@ -3571,7 +3601,7 @@ Payload de création d'un récépissé transporteur
 <tbody>
 <tr>
 <td colspan="2" valign="top"><strong>receiptNumber</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Numéro de récépissé transporteur
@@ -3580,7 +3610,7 @@ Numéro de récépissé transporteur
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>validityLimit</strong></td>
-<td valign="top"><a href="#datetime">DateTime</a></td>
+<td valign="top"><a href="#datetime">DateTime</a>!</td>
 <td>
 
 Limite de validatié du récépissé
@@ -3589,7 +3619,7 @@ Limite de validatié du récépissé
 </tr>
 <tr>
 <td colspan="2" valign="top"><strong>department</strong></td>
-<td valign="top"><a href="#string">String</a></td>
+<td valign="top"><a href="#string">String</a>!</td>
 <td>
 
 Département ayant enregistré la déclaration
@@ -3913,8 +3943,8 @@ de l'utilisateur à l'établissement
 </td>
 </tr>
 <tr>
-<td colspan="2" valign="top"><strong>transporterReceipt</strong></td>
-<td valign="top"><a href="#createtransporterreceiptinput">CreateTransporterReceiptInput</a></td>
+<td colspan="2" valign="top"><strong>transporterReceiptId</strong></td>
+<td valign="top"><a href="#string">String</a></td>
 <td>
 
 Récipissé transporteur (le cas échéant, pour les profils transporteur)
@@ -3922,8 +3952,8 @@ Récipissé transporteur (le cas échéant, pour les profils transporteur)
 </td>
 </tr>
 <tr>
-<td colspan="2" valign="top"><strong>traderReceipt</strong></td>
-<td valign="top"><a href="#createtraderreceiptinput">CreateTraderReceiptInput</a></td>
+<td colspan="2" valign="top"><strong>traderReceiptId</strong></td>
+<td valign="top"><a href="#string">String</a></td>
 <td>
 
 Récipissé négociant (le cas échéant, pour les profils négociant)

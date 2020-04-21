@@ -13,6 +13,10 @@ import {
   getUserRole,
   getInstallation
 } from "./queries";
+import createTransporterReceipt from "./mutations/transporterReceipt/createTransporterReceipt";
+import createTraderReceipt from "./mutations/traderReceipt/createTraderReceipt";
+import updateTransporterReceipt from "./mutations/transporterReceipt/updateTransporterReceipt";
+import updateTraderReceipt from "./mutations/traderReceipt/updateTraderReceipt";
 
 type FavoriteType = "EMITTER" | "TRANSPORTER" | "RECIPIENT" | "TRADER";
 
@@ -115,6 +119,10 @@ export default {
     updateCompany: (_, payload) => updateCompany(payload),
     createCompany: (_, { companyInput }, context: GraphQLContext) =>
       createCompany(companyInput, context.user),
+    createTransporterReceipt: (_, { input }) => createTransporterReceipt(input),
+    createTraderReceipt: (_, { input }) => createTraderReceipt(input),
+    updateTransporterReceipt: (_, { input }) => updateTransporterReceipt(input),
+    updateTraderReceipt: (_, { input }) => updateTraderReceipt(input),
     createUploadLink
   }
 };

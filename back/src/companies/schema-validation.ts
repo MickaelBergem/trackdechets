@@ -22,34 +22,70 @@ export default {
         codeNaf: string().nullable(true),
         companyName: string().nullable(true),
         documentKeys: array().of(string()),
-        transporterReceipt: object()
+        transporterReceiptId: string()
+          .notRequired()
+          .nullable(),
+        traderReceiptId: string()
           .notRequired()
           .nullable()
-          .shape({
-            receiptNumber: string()
-              .notRequired()
-              .nullable(),
-            validityLimit: string()
-              .notRequired()
-              .nullable(),
-            department: string()
-              .notRequired()
-              .nullable()
-          }),
-        traderReceipt: object()
+      })
+    }),
+    createTransporterReceipt: object({
+      input: object({
+        receiptNumber: string()
+          .required()
+          .nullable(false),
+        validityLimit: string()
+          .required()
+          .nullable(false),
+        department: string()
+          .required()
+          .nullable(false)
+      })
+    }),
+    createTraderReceipt: object({
+      input: object({
+        receiptNumber: string()
+          .required()
+          .nullable(false),
+        validityLimit: string()
+          .required()
+          .nullable(false),
+        department: string()
+          .required()
+          .nullable(false)
+      })
+    }),
+    updateTransporterReceipt: object({
+      input: object({
+        id: string()
+          .required()
+          .nullable(false),
+        receiptNumber: string()
+          .notRequired()
+          .nullable(),
+        validityLimit: string()
+          .notRequired()
+          .nullable(),
+        department: string()
           .notRequired()
           .nullable()
-          .shape({
-            receiptNumber: string()
-              .notRequired()
-              .nullable(),
-            validityLimit: string()
-              .notRequired()
-              .nullable(),
-            department: string()
-              .notRequired()
-              .nullable()
-          })
+      })
+    }),
+    updateTraderReceipt: object({
+      input: object({
+        id: string()
+          .required()
+          .nullable(false),
+        receiptNumber: string()
+          .notRequired()
+          .nullable(),
+        validityLimit: string()
+          .notRequired()
+          .nullable(),
+        department: string()
+          .notRequired()
+          .nullable()
       })
     }),
     createUploadLink: object({

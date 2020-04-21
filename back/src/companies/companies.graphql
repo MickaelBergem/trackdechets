@@ -63,19 +63,31 @@ type Mutation {
 
   """
   USAGE INTERNE
+  Crée un récépissé transporteur
+  """
+  createTransporterReceipt(
+    input: CreateTransporterReceiptInput
+  ): TransporterReceipt
+
+  """
+  USAGE INTERNE
+  Crée un récépissé transporteur
+  """
+  createTraderReceipt(input: CreateTraderReceiptInput): TraderReceipt
+
+  """
+  USAGE INTERNE
   Édite les informations d'un récépissé transporteur
   """
   updateTransporterReceipt(
-    transporterReceiptInput: UpdateTransporterReceiptInput
+    input: UpdateTransporterReceiptInput
   ): TransporterReceipt
 
   """
   USAGE INTERNE
   Édite les informations d'un récépissé négociant
   """
-  updateTraderReceipt(
-    traderReceiptInput: UpdateTraderReceiptInput
-  ): TraderReceipt
+  updateTraderReceipt(input: UpdateTraderReceiptInput): TraderReceipt
 
   """
   USAGE INTERNE
@@ -335,17 +347,17 @@ type TransporterReceipt {
   """
   Numéro de récépissé transporteur
   """
-  receiptNumber: String
+  receiptNumber: String!
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime
+  validityLimit: DateTime!
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String
+  department: String!
 }
 
 """
@@ -357,17 +369,17 @@ type TraderReceipt {
   """
   Numéro de récépissé négociant
   """
-  receiptNumber: String
+  receiptNumber: String!
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime
+  validityLimit: DateTime!
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String
+  department: String!
 }
 
 """
@@ -377,17 +389,17 @@ input CreateTransporterReceiptInput {
   """
   Numéro de récépissé transporteur
   """
-  receiptNumber: String
+  receiptNumber: String!
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime
+  validityLimit: DateTime!
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String
+  department: String!
 }
 
 """
@@ -397,17 +409,17 @@ input CreateTraderReceiptInput {
   """
   Numéro de récépissé négociant
   """
-  receiptNumber: String
+  receiptNumber: String!
 
   """
   Limite de validatié du récépissé
   """
-  validityLimit: DateTime
+  validityLimit: DateTime!
 
   """
   Département ayant enregistré la déclaration
   """
-  department: String
+  department: String!
 }
 
 """
@@ -486,12 +498,12 @@ input PrivateCompanyInput {
   """
   Récipissé transporteur (le cas échéant, pour les profils transporteur)
   """
-  transporterReceipt: CreateTransporterReceiptInput
+  transporterReceiptId: String
 
   """
   Récipissé négociant (le cas échéant, pour les profils négociant)
   """
-  traderReceipt: CreateTraderReceiptInput
+  traderReceiptId: String
 }
 
 "Information sur utilisateur au sein d'un établissement"

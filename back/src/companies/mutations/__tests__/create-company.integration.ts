@@ -56,7 +56,7 @@ describe("Create company endpoint", () => {
     expect(newCompanyAssociationExists).toBe(true);
   });
 
-  test("should create transporterReceipt", async () => {
+  test("should link to a transporterReceipt", async () => {
     const user = await userFactory();
 
     const siret = "12345678912345";
@@ -68,6 +68,10 @@ describe("Create company endpoint", () => {
       department: "07"
     };
 
+    const receiptId = await prisma
+      .createTransporterReceipt(transporterReceipt)
+      .id();
+
     const mutation = `
       mutation {
         createCompany(
@@ -75,11 +79,7 @@ describe("Create company endpoint", () => {
             siret: "${siret}"
             companyName: "${name}"
             companyTypes: [${companyTypes}]
-            transporterReceipt: {
-              receiptNumber: "${transporterReceipt.receiptNumber}"
-              validityLimit: "${transporterReceipt.validityLimit}"
-              department: "${transporterReceipt.department}"
-            }
+            transporterReceiptId: "${receiptId}"
           }
         ) {
             siret
@@ -95,24 +95,10 @@ describe("Create company endpoint", () => {
 
     const { data } = await mutate(mutation);
 
-    // check the transporterReceipt was created in db
-    expect(
-      await prisma
-        .transporterReceiptsConnection()
-        .aggregate()
-        .count()
-    ).toEqual(1);
-
-    expect(
-      await prisma.$exists.transporterReceipt({
-        receiptNumber: transporterReceipt.receiptNumber
-      })
-    );
-
     expect(data.createCompany.transporterReceipt).toEqual(transporterReceipt);
   });
 
-  test("should create traderReceipt", async () => {
+  test("should link to a traderReceipt", async () => {
     const user = await userFactory();
 
     const siret = "12345678912345";
@@ -124,6 +110,8 @@ describe("Create company endpoint", () => {
       department: "07"
     };
 
+    const receiptId = await prisma.createTraderReceipt(traderReceipt).id();
+
     const mutation = `
       mutation {
         createCompany(
@@ -131,11 +119,7 @@ describe("Create company endpoint", () => {
             siret: "${siret}"
             companyName: "${name}"
             companyTypes: [${companyTypes}]
-            traderReceipt: {
-              receiptNumber: "${traderReceipt.receiptNumber}"
-              validityLimit: "${traderReceipt.validityLimit}"
-              department: "${traderReceipt.department}"
-            }
+            traderReceiptId: "${receiptId}"
           }
         ) {
             siret
@@ -152,19 +136,6 @@ describe("Create company endpoint", () => {
     const { data } = await mutate(mutation);
 
     // check the traderReceipt was created in db
-    expect(
-      await prisma
-        .traderReceiptsConnection()
-        .aggregate()
-        .count()
-    ).toEqual(1);
-
-    expect(
-      await prisma.$exists.traderReceipt({
-        receiptNumber: traderReceipt.receiptNumber
-      })
-    );
-
     expect(data.createCompany.traderReceipt).toEqual(traderReceipt);
   });
 

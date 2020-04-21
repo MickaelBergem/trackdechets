@@ -2918,9 +2918,9 @@ export interface FormUpsertNestedInput {
 
 export interface TransporterReceiptCreateInput {
   id?: Maybe<ID_Input>;
-  receiptNumber?: Maybe<String>;
-  validityLimit?: Maybe<DateTimeInput>;
-  department?: Maybe<String>;
+  receiptNumber: String;
+  validityLimit: DateTimeInput;
+  department: String;
 }
 
 export interface RubriqueWhereInput {
@@ -3102,9 +3102,9 @@ export interface StatusLogUpdateInput {
 
 export interface TraderReceiptCreateInput {
   id?: Maybe<ID_Input>;
-  receiptNumber?: Maybe<String>;
-  validityLimit?: Maybe<DateTimeInput>;
-  department?: Maybe<String>;
+  receiptNumber: String;
+  validityLimit: DateTimeInput;
+  department: String;
 }
 
 export interface StatusLogCreateInput {
@@ -7042,9 +7042,9 @@ export interface UserActivationHashPreviousValuesSubscription
 
 export interface TransporterReceipt {
   id: ID_Output;
-  receiptNumber?: String;
-  validityLimit?: DateTimeOutput;
-  department?: String;
+  receiptNumber: String;
+  validityLimit: DateTimeOutput;
+  department: String;
 }
 
 export interface TransporterReceiptPromise
@@ -7101,9 +7101,9 @@ export interface UserSubscriptionPayloadSubscription
 
 export interface TraderReceipt {
   id: ID_Output;
-  receiptNumber?: String;
-  validityLimit?: DateTimeOutput;
-  department?: String;
+  receiptNumber: String;
+  validityLimit: DateTimeOutput;
+  department: String;
 }
 
 export interface TraderReceiptPromise
@@ -10305,9 +10305,9 @@ export interface FormConnectionSubscription
 
 export interface TraderReceiptPreviousValues {
   id: ID_Output;
-  receiptNumber?: String;
-  validityLimit?: DateTimeOutput;
-  department?: String;
+  receiptNumber: String;
+  validityLimit: DateTimeOutput;
+  department: String;
 }
 
 export interface TraderReceiptPreviousValuesPromise
@@ -10412,9 +10412,9 @@ export interface CompanyEdgeSubscription
 
 export interface TransporterReceiptPreviousValues {
   id: ID_Output;
-  receiptNumber?: String;
-  validityLimit?: DateTimeOutput;
-  department?: String;
+  receiptNumber: String;
+  validityLimit: DateTimeOutput;
+  department: String;
 }
 
 export interface TransporterReceiptPreviousValuesPromise
