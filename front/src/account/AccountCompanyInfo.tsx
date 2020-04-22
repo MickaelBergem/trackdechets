@@ -5,8 +5,9 @@ import AccountFieldCompanyTypes from "./fields/AccountFieldCompanyTypes";
 import AccountFieldNotEditable from "./fields/AccountFieldNotEditable";
 import AccountFieldCompanyGerepId from "./fields/AccountFieldCompanyGerepId";
 import AccountFieldCompanyGivenName, {
-  tooltip as givenNameTooltip
+  tooltip as givenNameTooltip,
 } from "./fields/AccountFieldCompanyGivenName";
+import AccountFieldCompanyTransporterReceipt from "./fields/AccountFieldCompanyTransporterReceipt";
 import { Company, UserRole } from "./AccountCompany";
 
 type Props = { company: Company };
@@ -23,6 +24,7 @@ AccountCompanyInfo.fragments = {
       ...AccountFieldCompanyTypesFragment
       ...AccountFieldCompanyGerepIdFragment
       ...AccountFieldCompanyGivenNameFragment
+      ...AccountFieldCompanyTransporterReceiptFragment
       installation {
         urlFiche
       }
@@ -30,7 +32,8 @@ AccountCompanyInfo.fragments = {
     ${AccountFieldCompanyTypes.fragments.company}
     ${AccountFieldCompanyGerepId.fragments.company}
     ${AccountFieldCompanyGivenName.fragments.company}
-  `
+    ${AccountFieldCompanyTransporterReceipt.fragments.company}
+  `,
 };
 
 export default function AccountCompanyInfo({ company }: Props) {
@@ -73,6 +76,12 @@ export default function AccountCompanyInfo({ company }: Props) {
       />
       <AccountFieldCompanyTypes
         company={filter(AccountFieldCompanyTypes.fragments.company, company)}
+      />
+      <AccountFieldCompanyTransporterReceipt
+        company={filter(
+          AccountFieldCompanyTransporterReceipt.fragments.company,
+          company
+        )}
       />
       {company.userRole === UserRole.ADMIN ? (
         <AccountFieldCompanyGivenName

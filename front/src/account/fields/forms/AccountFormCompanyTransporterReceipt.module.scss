@@ -1,0 +1,53 @@
+.companyAddForm {
+  max-width: initial;
+
+  .subtitle {
+    padding-bottom: 0.5em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid var(--lighter-grey);
+  }
+
+  .field {
+    width: 100%;
+    display: flex;
+    margin: 1.5em auto;
+    justify-content: flex-start;
+  }
+
+  .field > label {
+    flex-shrink: 0;
+    width: 180px;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .field__value {
+    width: 100%;
+    display: block;
+    margin-left: 1em;
+    margin-right: 1em;
+  }
+
+  .submit-form {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .submit-form > button {
+    margin: 0.5em;
+  }
+
+  input[type="text"] {
+    width: 300px;
+  }
+
+  input[type="date"] {
+    width: 300px;
+  }
+
+  .smaller {
+    font-size: 90%;
+  }
+}

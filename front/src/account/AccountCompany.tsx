@@ -15,7 +15,7 @@ type Installation = {
 
 export enum UserRole {
   ADMIN = "ADMIN",
-  MEMBER = "MEMBER"
+  MEMBER = "MEMBER",
 }
 
 export type CompanyMember = {
@@ -26,6 +26,18 @@ export type CompanyMember = {
   role: UserRole;
   isActive: boolean;
   isPendingInvitation: boolean;
+};
+
+export type TransporterReceipt = {
+  receiptNumber: string;
+  validityLimit: string;
+  department: string;
+};
+
+export type TraderReceipt = {
+  receiptNumber: string;
+  validityLimit: string;
+  department: string;
 };
 
 export type Company = {
@@ -44,6 +56,8 @@ export type Company = {
   contactPhone: string;
   website: string;
   givenName: string;
+  transporterReceipt: TransporterReceipt;
+  traderReceipt: TraderReceipt;
 };
 
 type Props = {
@@ -54,7 +68,7 @@ export enum Link {
   Info = "Information",
   Security = "Sécurité",
   Members = "Membres",
-  CompanyPage = "Fiche Entreprise"
+  CompanyPage = "Fiche Entreprise",
 }
 
 AccountCompany.fragments = {
@@ -73,7 +87,7 @@ AccountCompany.fragments = {
     ${AccountCompanySecurity.fragments.company}
     ${AccountCompanyMemberList.fragments.company}
     ${AccountCompanyPage.fragments.company}
-  `
+  `,
 };
 
 export default function AccountCompany({ company }: Props) {

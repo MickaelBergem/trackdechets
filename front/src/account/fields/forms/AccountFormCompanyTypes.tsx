@@ -32,12 +32,12 @@ export default function AccountFormCompanyTypes({
   name,
   siret,
   companyTypes,
-  toggleEdition
+  toggleEdition,
 }: Props) {
   const [update, { loading, error }] = useMutation(UPDATE_COMPANY_TYPES, {
     onCompleted: () => {
       toggleEdition();
-    }
+    },
   });
 
   const initialValues = {} as V;
@@ -59,7 +59,7 @@ export default function AccountFormCompanyTypes({
           <div className="form__group">
             <Field
               className={styles.input}
-              name="companyTypes"
+              name={name}
               component={CompanyTypes}
             ></Field>
           </div>
