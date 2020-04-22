@@ -5,12 +5,12 @@ import gql from "graphql-tag";
 import { useHistory } from "react-router-dom";
 import { GET_ME } from "../dashboard/Dashboard";
 import { NotificationError } from "../common/Error";
-import Loader from "../common/Loader";
 import RedErrorMessage from "../common/RedErrorMessage";
 import CompanyType from "../login/CompanyType";
 import AccountCompanyAddTransporterReceipt from "./accountCompanyAdd/AccountCompanyAddTransporterReceipt";
 import AccountCompanyAddSiret from "./accountCompanyAdd/AccountCompanyAddSiret";
 import styles from "./AccountCompanyAdd.module.scss";
+import { FaHourglassHalf } from "react-icons/fa";
 
 const CREATE_COMPANY = gql`
   mutation CreateCompany($companyInput: PrivateCompanyInput!) {
@@ -33,6 +33,14 @@ const CREATE_UPLOAD_LINK = gql`
   }
 `;
 
+const CREATE_TRANSPORTER_RECEIPT = gql`
+  mutation CreateTransporterReceipt($input: CreateTransporterReceiptInput!) {
+    createTransporterReceipt(input: $input) {
+      id
+    }
+  }
+`;
+
 interface Values extends FormikValues {
   siret: string;
   companyName: string;
@@ -40,6 +48,7 @@ interface Values extends FormikValues {
   companyTypes: string[];
   gerepId: string;
   codeNaf: string;
+  document: File | null;
   isAllowed: boolean;
   transporterReceiptNumber: string;
   transporterReceiptValidity: string;
@@ -59,18 +68,18 @@ interface TransporterReceipt {
   department?: string;
 }
 
+/**
+ * This component allows to create a company and make
+ * the logged in user admin of it
+ */
 export default function AccountCompanyAdd() {
   const history = useHistory();
 
   // STATES
   const [toggleForm, setToggleForm] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
 
   // QUERIES AND MUTATIONS
-  const [
-    createCompany,
-    { loading: savingCompany, error: savingError },
-  ] = useMutation(CREATE_COMPANY, {
+  const [createCompany, { error: savingError }] = useMutation(CREATE_COMPANY, {
     update(cache, { data: { createCompany } }) {
       const getMeQuery = cache.readQuery<{ me: any }>({ query: GET_ME });
       if (getMeQuery == null) {
@@ -86,7 +95,12 @@ export default function AccountCompanyAdd() {
     },
   });
 
-  const [createUploadLink] = useMutation<{
+  const [
+    createTransporterReceipt,
+    { error: createTransporterReceiptError },
+  ] = useMutation(CREATE_TRANSPORTER_RECEIPT);
+
+  const [createUploadLink, { error: uploadError }] = useMutation<{
     createUploadLink: { signedUrl: string; key: string };
   }>(CREATE_UPLOAD_LINK);
 
@@ -135,79 +149,89 @@ export default function AccountCompanyAdd() {
    * @param values form values
    */
   async function onSubmit(values: Values) {
-    let documentKeys = [] as string[];
-
-    if (uploadedFile && uploadedFile.fileType && uploadedFile.file) {
-      console.log("UPLOAD FILE");
-      // upload files if any
-      try {
-        // Retrieves a signed URL
-        const { data } = await createUploadLink();
-        if (data) {
-          // upload file to signed URL
-          const uploadLink = data.createUploadLink;
-          fetch(uploadLink.signedUrl, {
-            method: "PUT",
-            body: uploadedFile.file,
-            headers: {
-              "Content-Type": uploadedFile.fileType,
-              "x-amz-acl": "private",
-            },
-          }).then((_) => (documentKeys = [uploadLink.key]));
-        }
-      } catch (err) {
-        // fail silently if an error occured during file upload
-      }
-    }
-
     const {
       address,
       isAllowed,
+      document,
       transporterReceiptNumber,
       transporterReceiptValidity,
       transporterReceiptDepartment,
       ...companyInput
     } = values;
 
-    let transporterReceipt: TransporterReceipt = {};
+    try {
+      let documentKeys = [] as string[];
 
-    const isTransporter = values.companyTypes.includes("TRANSPORTER");
+      if (document) {
+        // upload files if any
 
-    if (
-      !!transporterReceiptNumber &&
-      !!transporterReceiptValidity &&
-      !!transporterReceiptDepartment &&
-      isTransporter
-    ) {
-      // all fields should be set
-      transporterReceipt = {
-        receiptNumber: transporterReceiptNumber,
-        validityLimit: transporterReceiptValidity,
-        department: transporterReceiptDepartment,
-      };
-    }
+        const { name: fileName, type: fileType } = document;
 
-    createCompany({
-      variables: {
-        companyInput: {
-          ...companyInput,
-          documentKeys,
-          transporterReceipt,
+        // Retrieves a signed URL
+        const { data } = await createUploadLink({
+          variables: { fileName, fileType },
+        });
+        if (data) {
+          // upload file to signed URL
+          const uploadLink = data.createUploadLink;
+          await fetch(uploadLink.signedUrl, {
+            method: "PUT",
+            body: document,
+            headers: {
+              "Content-Type": fileType,
+              "x-amz-acl": "private",
+            },
+          });
+          documentKeys = [uploadLink.key];
+        }
+      }
+
+      let transporterReceiptId: string | null = null;
+
+      // create transporter receipt if any
+      const isTransporter = values.companyTypes.includes("TRANSPORTER");
+      if (
+        !!transporterReceiptNumber &&
+        !!transporterReceiptValidity &&
+        !!transporterReceiptDepartment &&
+        isTransporter
+      ) {
+        // all fields should be set
+        const input = {
+          receiptNumber: transporterReceiptNumber,
+          validityLimit: transporterReceiptValidity,
+          department: transporterReceiptDepartment,
+        };
+
+        const { data } = await createTransporterReceipt({
+          variables: { input },
+        });
+
+        if (data) {
+          transporterReceiptId = data.createTransporterReceipt.id;
+        }
+      }
+
+      await createCompany({
+        variables: {
+          companyInput: {
+            ...companyInput,
+            documentKeys,
+            transporterReceiptId,
+          },
         },
-      },
-    }).then((_) => {
+      });
+
       history.push("/dashboard/slips");
-    });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  if (savingCompany) {
-    return <Loader />;
-  }
+  console.log(savingError);
 
   return (
     <div className="panel">
-      {savingError && <NotificationError apolloError={savingError} />}
-
       <Formik<Values>
         initialValues={{
           siret: "",
@@ -216,6 +240,7 @@ export default function AccountCompanyAdd() {
           companyTypes: [],
           gerepId: "",
           codeNaf: "",
+          document: null,
           isAllowed: false,
           transporterReceiptNumber: "",
           transporterReceiptValidity: "",
@@ -308,16 +333,12 @@ export default function AccountCompanyAdd() {
                     <input
                       type="file"
                       className="button"
-                      accept="image/png, image/jpeg, .pdf"
+                      accept="image/png, image/jpeg, image/gif, application/pdf "
                       onChange={async (event) => {
                         const file = event.currentTarget.files?.item(0);
-                        if (!file) {
-                          return;
+                        if (!!file) {
+                          setFieldValue("document", file);
                         }
-                        const fileParts = file.name.split(".");
-                        const fileName = fileParts[0];
-                        const fileType = fileParts[1];
-                        setUploadedFile({ file, fileName, fileType });
                       }}
                     />
                     <div className={styles.smaller}>
@@ -357,6 +378,7 @@ export default function AccountCompanyAdd() {
                       <a
                         href="https://faq.trackdechets.fr/la-gestion-des-dechets-dangereux#quest-ce-quun-identifiant-gerep"
                         target="_blank"
+                        rel="noopener noreferrer"
                       >
                         Plus d'informations sur la FAQ
                       </a>
@@ -389,14 +411,22 @@ export default function AccountCompanyAdd() {
                   >
                     Annuler
                   </button>
+
                   <button
                     className="button"
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    Créer l'entreprise
+                    {isSubmitting ? <FaHourglassHalf /> : "Créer l'entreprise"}
                   </button>
                 </div>
+                {savingError && <NotificationError apolloError={savingError} />}
+                {uploadError && <NotificationError apolloError={uploadError} />}
+                {createTransporterReceiptError && (
+                  <NotificationError
+                    apolloError={createTransporterReceiptError}
+                  />
+                )}
               </>
             )}
           </Form>

@@ -4,6 +4,7 @@ import * as mailsHelper from "../../../common/mails.helper";
 import { prisma, MutationType } from "../../../generated/prisma-client";
 import makeClient from "../../../__tests__/testClient";
 import { ErrorCode } from "../../../common/errors";
+import { CompanyType } from "../../../generated/types";
 
 // No mails
 const sendMailSpy = jest.spyOn(mailsHelper, "sendMail");
@@ -20,7 +21,7 @@ describe("Create company endpoint", () => {
     const siret = "12345678912345";
     const gerepId = "1234";
     const name = "Acme";
-    const companyTypes = ["PRODUCER"];
+    const companyTypes = [CompanyType.Producer];
 
     const mutation = `
     mutation {
@@ -61,7 +62,7 @@ describe("Create company endpoint", () => {
 
     const siret = "12345678912345";
     const name = "Acme";
-    const companyTypes = ["TRANSPORTER"];
+    const companyTypes = [CompanyType.Transporter];
     const transporterReceipt = {
       receiptNumber: "1234",
       validityLimit: "2023-03-31T00:00:00.000Z",
@@ -103,7 +104,7 @@ describe("Create company endpoint", () => {
 
     const siret = "12345678912345";
     const name = "Acme";
-    const companyTypes = ["TRADER"];
+    const companyTypes = [CompanyType.Trader];
     const traderReceipt = {
       receiptNumber: "1234",
       validityLimit: "2023-03-31T00:00:00.000Z",
@@ -137,6 +138,35 @@ describe("Create company endpoint", () => {
 
     // check the traderReceipt was created in db
     expect(data.createCompany.traderReceipt).toEqual(traderReceipt);
+  });
+
+  it("should create document keys", async () => {
+    const user = await userFactory();
+
+    const siret = "12345678912345";
+    const name = "Acme";
+    const companyTypes = [CompanyType.Producer];
+
+    const mutation = `
+      mutation {
+        createCompany(
+          companyInput: {
+            siret: "${siret}"
+            companyName: "${name}"
+            companyTypes: [${companyTypes}]
+            documentKeys: ["key1", "key2"]
+          }
+        ) {
+            siret
+          }
+      }`;
+
+    const { mutate } = makeClient(user);
+
+    await mutate(mutation);
+
+    const company = await prisma.company({ siret });
+    expect(company.documentKeys).toEqual(["key1", "key2"]);
   });
 
   test("should throw error if the company already exist", async () => {

@@ -26,7 +26,8 @@ export default async function createCompany(
     companyName: name,
     companyTypes,
     transporterReceiptId,
-    traderReceiptId
+    traderReceiptId,
+    documentKeys
   } = companyInput;
 
   const trimedSiret = siret.replace(/\s+/g, "");
@@ -65,6 +66,12 @@ export default async function createCompany(
   if (!!traderReceiptId) {
     companyCreateInput.traderReceipt = {
       connect: { id: traderReceiptId }
+    };
+  }
+
+  if (!!documentKeys && documentKeys.length >= 1) {
+    companyCreateInput.documentKeys = {
+      set: documentKeys
     };
   }
 

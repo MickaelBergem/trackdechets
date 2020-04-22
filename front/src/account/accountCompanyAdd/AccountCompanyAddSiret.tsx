@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLazyQuery } from "@apollo/react-hooks";
 import { Field, FormikProps } from "formik";
 import { FaHourglassHalf } from "react-icons/fa";
@@ -24,46 +24,29 @@ export default function AccountCompanyAddSiret({
   values,
   onCompanyInfos,
 }: IProps) {
-  const [searchCompany, { loading, data, error }] = useLazyQuery(
-    COMPANY_INFOS,
-    {
-      onCompleted: (data) => {
-        if (data && data.companyInfos) {
-          const companyInfos = data.companyInfos;
-          if (companyInfos.isRegistered) {
-            cogoToast.error(
-              "Ce SIRET existe déjà dans Trackdéchets, impossible de le re-créer."
-            );
-            onCompanyInfos(null);
-          } else if (data.companyInfos.etatAdministratif === "F") {
-            cogoToast.error(
-              "Cet établissement est fermé, impossible de le créer"
-            );
-            onCompanyInfos(null);
-          } else {
-            onCompanyInfos(data.companyInfos);
-          }
+  const [searchCompany, { loading, error }] = useLazyQuery(COMPANY_INFOS, {
+    onCompleted: (data) => {
+      if (data && data.companyInfos) {
+        const companyInfos = data.companyInfos;
+        if (companyInfos.isRegistered) {
+          cogoToast.error(
+            "Ce SIRET existe déjà dans Trackdéchets, impossible de le re-créer."
+          );
+          onCompanyInfos(null);
+        } else if (data.companyInfos.etatAdministratif === "F") {
+          cogoToast.error(
+            "Cet établissement est fermé, impossible de le créer"
+          );
+          onCompanyInfos(null);
+        } else {
+          onCompanyInfos(data.companyInfos);
         }
-      },
-      onError: () => {
-        onCompanyInfos(null);
-      },
-    }
-  );
-
-  const bap = {
-    siret: "79824982700014",
-    name: "LE BAR A PAIN",
-    naf: "10.71C",
-    address: "18 Cours Joseph Thierry 13001 Marseille",
-    etatAdministratif: "A",
-    isRegistered: false,
-    installation: null,
-  };
-
-  useEffect(() => {
-    onCompanyInfos(bap);
-  }, []);
+      }
+    },
+    onError: () => {
+      onCompanyInfos(null);
+    },
+  });
 
   return (
     <div className={styles.field}>

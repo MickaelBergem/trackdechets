@@ -12,17 +12,27 @@ export const isFunction = (obj: any): obj is Function =>
 
 export const ErrorProvider: FunctionComponent<Props> = ({
   apolloError,
-  children
+  children,
 }) => {
   if (!children || !isFunction(children)) {
     console.info("ErrorProvider only accepts a function as a child.");
     return null;
   }
 
-  const errors = apolloError.graphQLErrors ??
-    apolloError.networkError ?? [apolloError];
+  const { graphQLErrors, networkError } = apolloError;
 
-  return <>{errors.map((error, idx) => children({ error, idx }))}</>;
+  if (graphQLErrors.length >= 1) {
+    return <>{graphQLErrors.map((error, idx) => children({ error, idx }))}</>;
+  }
+
+  if (networkError) {
+    return children({ error: networkError });
+  }
+
+  if (apolloError) {
+    return children({ error: apolloError });
+  }
+  return null;
 };
 
 export function InlineError({ apolloError }: Props) {
@@ -41,8 +51,9 @@ export function NotificationError({ apolloError, className }: Props) {
       {({ error, idx }) => (
         <div
           key={`${idx}-${error.message}`}
-          className={`notification error ${styles.lineBreak} ${className ??
-            ""}`}
+          className={`notification error ${styles.lineBreak} ${
+            className ?? ""
+          }`}
         >
           {error.message}
         </div>
