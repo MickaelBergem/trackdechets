@@ -8,6 +8,7 @@ import { NotificationError } from "../common/Error";
 import RedErrorMessage from "../common/RedErrorMessage";
 import CompanyType from "../login/CompanyType";
 import AccountCompanyAddTransporterReceipt from "./accountCompanyAdd/AccountCompanyAddTransporterReceipt";
+import AccountCompanyAddTraderReceipt from "./accountCompanyAdd/AccountCompanyAddTraderReceipt";
 import AccountCompanyAddSiret from "./accountCompanyAdd/AccountCompanyAddSiret";
 import styles from "./AccountCompanyAdd.module.scss";
 import { FaHourglassHalf } from "react-icons/fa";
@@ -41,6 +42,14 @@ const CREATE_TRANSPORTER_RECEIPT = gql`
   }
 `;
 
+const CREATE_TRADER_RECEIPT = gql`
+  mutation CreateTraderReceipt($input: CreateTraderReceiptInput!) {
+    createTraderReceipt(input: $input) {
+      id
+    }
+  }
+`;
+
 interface Values extends FormikValues {
   siret: string;
   companyName: string;
@@ -53,19 +62,9 @@ interface Values extends FormikValues {
   transporterReceiptNumber: string;
   transporterReceiptValidity: string;
   transporterReceiptDepartment: string;
-}
-
-interface UploadedFile {
-  key?: string;
-  file?: File;
-  fileName?: string;
-  fileType?: string;
-}
-
-interface TransporterReceipt {
-  receiptNumber?: string;
-  validityLimit?: string;
-  department?: string;
+  traderReceiptNumber: string;
+  traderReceiptValidity: string;
+  traderReceiptDepartment: string;
 }
 
 /**
@@ -99,6 +98,11 @@ export default function AccountCompanyAdd() {
     createTransporterReceipt,
     { error: createTransporterReceiptError },
   ] = useMutation(CREATE_TRANSPORTER_RECEIPT);
+
+  const [
+    createTraderReceipt,
+    { error: createTraderReceiptError },
+  ] = useMutation(CREATE_TRADER_RECEIPT);
 
   const [createUploadLink, { error: uploadError }] = useMutation<{
     createUploadLink: { signedUrl: string; key: string };
@@ -144,6 +148,14 @@ export default function AccountCompanyAdd() {
     setToggleForm(!!companyInfos);
   }
 
+  function isTransporter(companyTypes) {
+    return companyTypes.includes("TRANSPORTER");
+  }
+
+  function isTrader(companyTypes) {
+    return companyTypes.includes("TRADER");
+  }
+
   /**
    * Form submission callback
    * @param values form values
@@ -156,79 +168,103 @@ export default function AccountCompanyAdd() {
       transporterReceiptNumber,
       transporterReceiptValidity,
       transporterReceiptDepartment,
+      traderReceiptNumber,
+      traderReceiptValidity,
+      traderReceiptDepartment,
       ...companyInput
     } = values;
 
-    try {
-      let documentKeys = [] as string[];
+    let documentKeys = [] as string[];
 
-      if (document) {
-        // upload files if any
+    if (document) {
+      // upload files if any
 
-        const { name: fileName, type: fileType } = document;
+      const { name: fileName, type: fileType } = document;
 
-        // Retrieves a signed URL
-        const { data } = await createUploadLink({
-          variables: { fileName, fileType },
-        });
-        if (data) {
-          // upload file to signed URL
-          const uploadLink = data.createUploadLink;
-          await fetch(uploadLink.signedUrl, {
-            method: "PUT",
-            body: document,
-            headers: {
-              "Content-Type": fileType,
-              "x-amz-acl": "private",
-            },
-          });
-          documentKeys = [uploadLink.key];
-        }
-      }
+      // Retrieves a signed URL
 
-      let transporterReceiptId: string | null = null;
-
-      // create transporter receipt if any
-      const isTransporter = values.companyTypes.includes("TRANSPORTER");
-      if (
-        !!transporterReceiptNumber &&
-        !!transporterReceiptValidity &&
-        !!transporterReceiptDepartment &&
-        isTransporter
-      ) {
-        // all fields should be set
-        const input = {
-          receiptNumber: transporterReceiptNumber,
-          validityLimit: transporterReceiptValidity,
-          department: transporterReceiptDepartment,
-        };
-
-        const { data } = await createTransporterReceipt({
-          variables: { input },
-        });
-
-        if (data) {
-          transporterReceiptId = data.createTransporterReceipt.id;
-        }
-      }
-
-      await createCompany({
-        variables: {
-          companyInput: {
-            ...companyInput,
-            documentKeys,
-            transporterReceiptId,
-          },
-        },
+      const { data } = await createUploadLink({
+        variables: { fileName, fileType },
       });
 
-      history.push("/dashboard/slips");
-    } catch (err) {
-      console.log(err);
+      if (data) {
+        // upload file to signed URL
+        const uploadLink = data.createUploadLink;
+        await fetch(uploadLink.signedUrl, {
+          method: "PUT",
+          body: document,
+          headers: {
+            "Content-Type": fileType,
+            "x-amz-acl": "private",
+          },
+        });
+        documentKeys = [uploadLink.key];
+      }
     }
-  }
 
-  console.log(savingError);
+    let transporterReceiptId: string | null = null;
+
+    // create transporter receipt if any
+    if (
+      !!transporterReceiptNumber &&
+      !!transporterReceiptValidity &&
+      !!transporterReceiptDepartment &&
+      isTransporter(values.companyTypes)
+    ) {
+      // all fields should be set
+      const input = {
+        receiptNumber: transporterReceiptNumber,
+        validityLimit: transporterReceiptValidity,
+        department: transporterReceiptDepartment,
+      };
+
+      const { data } = await createTransporterReceipt({
+        variables: { input },
+      });
+
+      if (data) {
+        transporterReceiptId = data.createTransporterReceipt.id;
+      }
+    }
+
+    let traderReceiptId: string | null = null;
+
+    // create trader receipt if any
+    if (
+      !!traderReceiptNumber &&
+      !!traderReceiptValidity &&
+      !!traderReceiptDepartment &&
+      isTrader(values.companyTypes)
+    ) {
+      // all fields should be set
+      const input = {
+        receiptNumber: traderReceiptNumber,
+        validityLimit: traderReceiptValidity,
+        department: traderReceiptDepartment,
+      };
+
+      const { data } = await createTraderReceipt({
+        variables: { input },
+      });
+
+      if (data) {
+        traderReceiptId = data.createTraderReceipt.id;
+      }
+    }
+
+    await createCompany({
+      variables: {
+        companyInput: {
+          ...companyInput,
+          documentKeys,
+          transporterReceiptId,
+          traderReceiptId,
+        },
+      },
+    });
+
+    history.push("/dashboard/slips");
+  }
 
   return (
     <div className="panel">
@@ -245,6 +281,9 @@ export default function AccountCompanyAdd() {
           transporterReceiptNumber: "",
           transporterReceiptValidity: "",
           transporterReceiptDepartment: "",
+          traderReceiptNumber: "",
+          traderReceiptValidity: "",
+          traderReceiptDepartment: "",
         }}
         validate={(values) => {
           // whether or not one of the transporter receipt field is set
@@ -253,7 +292,15 @@ export default function AccountCompanyAdd() {
             !!values.transporterReceiptValidity ||
             !!values.transporterReceiptDepartment;
 
-          const isTransporter = values.companyTypes.includes("TRANSPORTER");
+          const isTransporter_ = isTransporter(values.companyTypes);
+
+          // whether or not one of the transporter receipt field is set
+          const anyTraderReceipField =
+            !!values.traderReceiptNumber ||
+            !!values.traderReceiptValidity ||
+            !!values.traderReceiptDepartment;
+
+          const isTrader_ = isTrader(values.companyTypes);
 
           return {
             ...(values.companyTypes.length === 0 && {
@@ -267,19 +314,34 @@ export default function AccountCompanyAdd() {
               siret: "Le SIRET doit faire 14 caractères",
             }),
             ...(anyTransporterReceipField &&
-              isTransporter &&
+              isTransporter_ &&
               !values.transporterReceiptNumber && {
                 transporterReceiptNumber: "Champ obligatoire",
               }),
             ...(anyTransporterReceipField &&
-              isTransporter &&
+              isTransporter_ &&
               !values.transporterReceiptValidity && {
                 transporterReceiptValidity: "Champ obligatoire",
               }),
-            ...(anyTransporterReceipField &&
-              isTransporter &&
-              !values.transporterReceiptDepartment && {
-                transporterReceiptDepartment: "Champ obligatoire",
+            ...(anyTraderReceipField &&
+              isTrader_ &&
+              !values.traderReceiptDepartment && {
+                traderReceiptDepartment: "Champ obligatoire",
+              }),
+            ...(anyTraderReceipField &&
+              isTrader_ &&
+              !values.traderReceiptNumber && {
+                traderReceiptNumber: "Champ obligatoire",
+              }),
+            ...(anyTraderReceipField &&
+              isTrader_ &&
+              !values.traderReceiptValidity && {
+                traderReceiptValidity: "Champ obligatoire",
+              }),
+            ...(anyTraderReceipField &&
+              isTrader_ &&
+              !values.traderReceiptDepartment && {
+                traderReceiptDepartment: "Champ obligatoire",
               }),
           };
         }}
@@ -363,8 +425,12 @@ export default function AccountCompanyAdd() {
                   </div>
                 </div>
 
-                {values.companyTypes.includes("TRANSPORTER") && (
+                {isTransporter(values.companyTypes) && (
                   <AccountCompanyAddTransporterReceipt />
+                )}
+
+                {isTrader(values.companyTypes) && (
+                  <AccountCompanyAddTraderReceipt />
                 )}
 
                 <div className={styles.field}>
@@ -420,13 +486,17 @@ export default function AccountCompanyAdd() {
                     {isSubmitting ? <FaHourglassHalf /> : "Créer l'entreprise"}
                   </button>
                 </div>
-                {savingError && <NotificationError apolloError={savingError} />}
+                {/* // ERRORS */}
                 {uploadError && <NotificationError apolloError={uploadError} />}
                 {createTransporterReceiptError && (
                   <NotificationError
                     apolloError={createTransporterReceiptError}
                   />
                 )}
+                {createTraderReceiptError && (
+                  <NotificationError apolloError={createTraderReceiptError} />
+                )}
+                {savingError && <NotificationError apolloError={savingError} />}
               </>
             )}
           </Form>
