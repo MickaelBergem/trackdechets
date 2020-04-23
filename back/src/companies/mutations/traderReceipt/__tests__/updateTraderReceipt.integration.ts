@@ -40,7 +40,6 @@ describe("{ mutation { updateTraderReceipt } }", () => {
     const { mutate } = makeClient(user);
 
     const { data, errors } = await mutate(mutation);
-    console.log(errors);
 
     // check returned value
     expect(data.updateTraderReceipt).toEqual(update);
