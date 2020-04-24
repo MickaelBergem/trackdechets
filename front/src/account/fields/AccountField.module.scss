@@ -5,6 +5,37 @@
   padding: 1em;
   justify-content: flex-start;
   border-top: 1px solid var(--lighter-grey);
+
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    padding-right: 1em;
+    padding-bottom: 1em;
+    vertical-align: top;
+  }
+
+  tr td:last-of-type {
+    padding-right: 0;
+  }
+
+  tr:last-of-type td {
+    padding-bottom: 0;
+  }
+
+  form {
+    margin: 0;
+    width: 100%;
+  }
+
+  input[type="text"] {
+    width: 300px;
+  }
+
+  input[type="date"] {
+    width: 300px;
+  }
 }
 
 .field__value {
@@ -20,19 +51,6 @@
 
 .field:last-of-type {
   border-bottom: 1px solid var(--lighter-grey);
-}
-
-form {
-  margin: 0;
-  width: 100%;
-}
-
-input[type="text"] {
-  width: 300px;
-}
-
-input[type="date"] {
-  width: 300px;
 }
 
 .editing {

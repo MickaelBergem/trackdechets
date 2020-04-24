@@ -13,31 +13,35 @@ export default function AccountCompanyAddTraderReceipt() {
         Récépissé Négociant (optionnel)
       </label>
       <div className={styles.field__value}>
-        <div>
-          <label>Numéro de récépissé</label>
-          <div>
-            <Field type="text" name="traderReceiptNumber" />
-            <RedErrorMessage name="traderReceiptNumber" />
-          </div>
-        </div>
-        <div>
-          <label>Limite de validité</label>
-          <div>
-            <Field type="date" name="traderReceiptValidity" />
-            <RedErrorMessage name="traderReceiptValidity" />
-          </div>
-        </div>
-        <div>
-          <label>Département</label>
-          <div>
-            <Field
-              type="text"
-              name="traderReceiptDepartment"
-              placeholder="75"
-            />
-            <RedErrorMessage name="traderReceiptDepartment" />
-          </div>
-        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>Numéro de récépissé</td>
+              <td>
+                <Field type="text" name="traderReceiptNumber" />
+                <RedErrorMessage name="traderReceiptNumber" />
+              </td>
+            </tr>
+            <tr>
+              <td>Limite de validité</td>
+              <td>
+                <Field type="date" name="traderReceiptValidity" />
+                <RedErrorMessage name="traderReceiptValidity" />
+              </td>
+            </tr>
+            <tr>
+              <td>Département</td>
+              <td>
+                <Field
+                  type="text"
+                  name="traderReceiptDepartment"
+                  placeholder="75"
+                />
+                <RedErrorMessage name="traderReceiptDepartment" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

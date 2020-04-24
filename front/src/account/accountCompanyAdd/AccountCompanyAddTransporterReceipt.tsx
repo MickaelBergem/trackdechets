@@ -13,31 +13,35 @@ export default function AccountCompanyAddTransporterReceipt() {
         Récépissé Transporteur (optionnel)
       </label>
       <div className={styles.field__value}>
-        <div>
-          <label>Numéro de récépissé</label>
-          <div>
-            <Field type="text" name="transporterReceiptNumber" />
-            <RedErrorMessage name="transporterReceiptNumber" />
-          </div>
-        </div>
-        <div>
-          <label>Limite de validité</label>
-          <div>
-            <Field type="date" name="transporterReceiptValidity" />
-            <RedErrorMessage name="transporterReceiptValidity" />
-          </div>
-        </div>
-        <div>
-          <label>Département</label>
-          <div>
-            <Field
-              type="text"
-              name="transporterReceiptDepartment"
-              placeholder="75"
-            />
-            <RedErrorMessage name="transporterReceiptDepartment" />
-          </div>
-        </div>
+        <table>
+          <tbody>
+            <tr>
+              <td>Numéro de récépissé</td>
+              <td>
+                <Field type="text" name="transporterReceiptNumber" />
+                <RedErrorMessage name="transporterReceiptNumber" />
+              </td>
+            </tr>
+            <tr>
+              <td>Limite de validité</td>
+              <td>
+                <Field type="date" name="transporterReceiptValidity" />
+                <RedErrorMessage name="transporterReceiptValidity" />
+              </td>
+            </tr>
+            <tr>
+              <td>Département</td>
+              <td>
+                <Field
+                  type="text"
+                  name="transporterReceiptDepartment"
+                  placeholder="75"
+                />
+                <RedErrorMessage name="transporterReceiptDepartment" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

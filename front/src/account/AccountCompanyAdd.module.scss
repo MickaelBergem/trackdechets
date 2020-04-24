@@ -50,4 +50,21 @@
   .smaller {
     font-size: 90%;
   }
+  table {
+    border-collapse: collapse;
+  }
+
+  td {
+    padding-right: 1em;
+    padding-bottom: 1em;
+    vertical-align: top;
+  }
+
+  tr td:last-of-type {
+    padding-right: 0;
+  }
+
+  tr:last-of-type td {
+    padding-bottom: 0;
+  }
 }

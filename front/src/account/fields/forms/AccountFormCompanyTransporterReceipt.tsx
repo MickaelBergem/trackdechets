@@ -62,6 +62,20 @@ export const DELETE_TRANSPORTER_RECEIPT = gql`
 `;
 
 /**
+ * Format date to yyyy-MM-dd
+ * @param d
+ */
+export function formatDate(d: string) {
+  const date = new Date(d);
+
+  // Cf https://stackoverflow.com/questions/3605214/javascript-add-leading-zeroes-to-date
+  const yyyy = date.getFullYear();
+  const mm = ("0" + (date.getMonth() + 1)).slice(-2);
+  const dd = ("0" + date.getDate()).slice(-2);
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+/**
  * This component allows to create / edit / delete a transporter receipt
  * @param param0
  */
@@ -103,26 +117,17 @@ export default function AccountFormCompanyTransporterReceipt({
     },
   });
 
-  const initialValues: V = {
-    receiptNumber: "",
-    validityLimit: "",
-    department: "",
-  };
-
-  if (transporterReceipt) {
-    const date = new Date(transporterReceipt.validityLimit);
-
-    // Format date to yyyy-MM-dd
-    // Cf https://stackoverflow.com/questions/3605214/javascript-add-leading-zeroes-to-date
-    const yyyy = date.getFullYear();
-    const mm = ("0" + (date.getMonth() + 1)).slice(-2);
-    const dd = ("0" + date.getDate()).slice(-2);
-    const dateStr = `${yyyy}-${mm}-${dd}`;
-
-    initialValues.receiptNumber = transporterReceipt.receiptNumber;
-    initialValues.validityLimit = dateStr;
-    initialValues.department = transporterReceipt.department;
-  }
+  const initialValues: V = transporterReceipt
+    ? {
+        receiptNumber: transporterReceipt.receiptNumber,
+        validityLimit: formatDate(transporterReceipt.validityLimit),
+        department: transporterReceipt.department,
+      }
+    : {
+        receiptNumber: "",
+        validityLimit: "",
+        department: "",
+      };
 
   return (
     <>
@@ -155,32 +160,39 @@ export default function AccountFormCompanyTransporterReceipt({
           }
           toggleEdition();
         }}
+        validate={(values) => {
+          return {
+            ...(!values.receiptNumber ? { receiptNumber: "Champ requis" } : {}),
+            ...(!values.validityLimit ? { validityLimit: "Champ requis" } : {}),
+            ...(!values.department ? { department: "Champ requis" } : {}),
+          };
+        }}
       >
         {(props: FormikProps<V>) => (
           <Form>
-            <div>
-              <div>
-                <label>Numéro de récépissé</label>
-                <div>
+            <table>
+              <tr>
+                <td>Numéro de récépissé</td>
+                <td>
                   <Field type="text" name="receiptNumber" />
                   <RedErrorMessage name="receiptNumber" />
-                </div>
-              </div>
-              <div>
-                <label>Limite de validité</label>
-                <div>
+                </td>
+              </tr>
+              <tr>
+                <td>Limite de validité</td>
+                <td>
                   <Field type="date" name="validityLimit" />
                   <RedErrorMessage name="validityLimit" />
-                </div>
-              </div>
-              <div>
-                <label>Département</label>
-                <div>
+                </td>
+              </tr>
+              <tr>
+                <td>Département</td>
+                <td>
                   <Field type="text" name="department" placeholder="75" />
                   <RedErrorMessage name="department" />
-                </div>
-              </div>
-            </div>
+                </td>
+              </tr>
+            </table>
             {(updateOrCreateLoading ||
               deleteLoading ||
               updateCompanyLoading) && <div>Envoi en cours...</div>}
