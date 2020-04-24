@@ -8,7 +8,6 @@ import {
   withRouter,
   RouteComponentProps,
   useHistory,
-  useRouteMatch,
 } from "react-router";
 import Loader from "../common/Loader";
 import { InlineError } from "../common/Error";

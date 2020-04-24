@@ -36,7 +36,7 @@ export default function updateCompany({
       ? { transporterReceipt: { connect: { id: transporterReceiptId } } }
       : {}),
     ...(traderReceiptId
-      ? { traderReceiptId: { connect: { id: traderReceiptId } } }
+      ? { traderReceipt: { connect: { id: traderReceiptId } } }
       : {})
   };
 

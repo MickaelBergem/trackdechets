@@ -9,6 +9,7 @@ import AccountFieldCompanyGivenName, {
 } from "./fields/AccountFieldCompanyGivenName";
 import AccountFieldCompanyTransporterReceipt from "./fields/AccountFieldCompanyTransporterReceipt";
 import { Company, UserRole } from "./AccountCompany";
+import AccountFieldCompanyTraderReceipt from "./fields/AccountFieldCompanyTraderReceipt";
 
 type Props = { company: Company };
 
@@ -26,6 +27,7 @@ AccountCompanyInfo.fragments = {
       ...AccountFieldCompanyGerepIdFragment
       ...AccountFieldCompanyGivenNameFragment
       ...AccountFieldCompanyTransporterReceiptFragment
+      ...AccountFieldCompanyTraderReceiptFragment
       installation {
         urlFiche
       }
@@ -34,6 +36,7 @@ AccountCompanyInfo.fragments = {
     ${AccountFieldCompanyGerepId.fragments.company}
     ${AccountFieldCompanyGivenName.fragments.company}
     ${AccountFieldCompanyTransporterReceipt.fragments.company}
+    ${AccountFieldCompanyTraderReceipt.fragments.company}
   `,
 };
 
@@ -82,6 +85,14 @@ export default function AccountCompanyInfo({ company }: Props) {
         <AccountFieldCompanyTransporterReceipt
           company={filter(
             AccountFieldCompanyTransporterReceipt.fragments.company,
+            company
+          )}
+        />
+      )}
+      {company.companyTypes.includes("TRADER") && (
+        <AccountFieldCompanyTraderReceipt
+          company={filter(
+            AccountFieldCompanyTraderReceipt.fragments.company,
             company
           )}
         />

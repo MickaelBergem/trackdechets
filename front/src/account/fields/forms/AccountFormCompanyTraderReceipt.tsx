@@ -7,7 +7,7 @@ import { Company } from "../../AccountCompany";
 import { NotificationError } from "../../../common/Error";
 
 type Props = {
-  company: Pick<Company, "id" | "siret" | "transporterReceipt">;
+  company: Pick<Company, "id" | "siret" | "traderReceipt">;
   toggleEdition: () => void;
 };
 
@@ -17,9 +17,9 @@ type V = {
   department: string;
 };
 
-const UPDATE_TRANSPORTER_RECEIPT = gql`
-  mutation UpdateTransporterReceipt($input: UpdateTransporterReceiptInput!) {
-    updateTransporterReceipt(input: $input) {
+const UPDATE_TRADER_RECEIPT = gql`
+  mutation UpdateTraderReceipt($input: UpdateTraderReceiptInput!) {
+    updateTraderReceipt(input: $input) {
       id
       receiptNumber
       validityLimit
@@ -28,9 +28,9 @@ const UPDATE_TRANSPORTER_RECEIPT = gql`
   }
 `;
 
-const CREATE_TRANSPORTER_RECEIPT = gql`
-  mutation CreateTransporterReceipt($input: CreateTransporterReceiptInput!) {
-    createTransporterReceipt(input: $input) {
+const CREATE_TRADER_RECEIPT = gql`
+  mutation CreateTraderReceipt($input: CreateTraderReceiptInput!) {
+    createTraderReceipt(input: $input) {
       id
       receiptNumber
       validityLimit
@@ -39,11 +39,11 @@ const CREATE_TRANSPORTER_RECEIPT = gql`
   }
 `;
 
-export const UPDATE_COMPANY_TRANSPORTER_RECEIPT = gql`
-  mutation UpdateCompany($siret: String!, $transporterReceiptId: String!) {
-    updateCompany(siret: $siret, transporterReceiptId: $transporterReceiptId) {
+export const UPDATE_COMPANY_TRADER_RECEIPT = gql`
+  mutation UpdateCompany($siret: String!, $traderReceiptId: String!) {
+    updateCompany(siret: $siret, traderReceiptId: $traderReceiptId) {
       id
-      transporterReceipt {
+      traderReceipt {
         id
         receiptNumber
         validityLimit
@@ -53,9 +53,9 @@ export const UPDATE_COMPANY_TRANSPORTER_RECEIPT = gql`
   }
 `;
 
-export const DELETE_TRANSPORTER_RECEIPT = gql`
-  mutation DeleteTransporterReceipt($input: DeleteTransporterReceiptInput!) {
-    deleteTransporterReceipt(input: $input) {
+export const DELETE_TRADER_RECEIPT = gql`
+  mutation DeleteTraderReceipt($input: DeleteTraderReceiptInput!) {
+    deleteTraderReceipt(input: $input) {
       id
     }
   }
@@ -76,52 +76,52 @@ export function formatDate(d: string) {
 }
 
 /**
- * This component allows to create / edit / delete a transporter receipt
+ * This component allows to create / edit / delete a trader receipt
  * @param param0
  */
 export default function AccountFormCompanyTransporterReceipt({
   company,
   toggleEdition,
 }: Props) {
-  const transporterReceipt = company.transporterReceipt;
+  const traderReceipt = company.traderReceipt;
 
   const [
-    createOrUpdateTransporterReceipt,
+    createOrUpdateTraderReceipt,
     { loading: updateOrCreateLoading, error: updateOrCreateError },
   ] = useMutation(
-    transporterReceipt ? UPDATE_TRANSPORTER_RECEIPT : CREATE_TRANSPORTER_RECEIPT
+    traderReceipt ? UPDATE_TRADER_RECEIPT : CREATE_TRADER_RECEIPT
   );
 
   const [
     updateCompany,
     { loading: updateCompanyLoading, error: updateCompanyError },
-  ] = useMutation(UPDATE_COMPANY_TRANSPORTER_RECEIPT);
+  ] = useMutation(UPDATE_COMPANY_TRADER_RECEIPT);
 
   const [
-    deleteTransporterReceipt,
+    deleteTraderReceipt,
     { loading: deleteLoading, error: deleteError },
-  ] = useMutation(DELETE_TRANSPORTER_RECEIPT, {
+  ] = useMutation(DELETE_TRADER_RECEIPT, {
     update(cache) {
       cache.writeFragment({
         id: company.id,
         fragment: gql`
-          fragment TransporterReceiptCompanyFragment on CompanyPrivate {
+          fragment TraderReceiptCompanyFragment on CompanyPrivate {
             id
-            transporterReceipt {
+            traderReceipt {
               id
             }
           }
         `,
-        data: { transporterReceipt: null, __typename: "CompanyPrivate" },
+        data: { traderReceipt: null, __typename: "CompanyPrivate" },
       });
     },
   });
 
-  const initialValues: V = transporterReceipt
+  const initialValues: V = traderReceipt
     ? {
-        receiptNumber: transporterReceipt.receiptNumber,
-        validityLimit: formatDate(transporterReceipt.validityLimit),
-        department: transporterReceipt.department,
+        receiptNumber: traderReceipt.receiptNumber,
+        validityLimit: formatDate(traderReceipt.validityLimit),
+        department: traderReceipt.department,
       }
     : {
         receiptNumber: "",
@@ -144,17 +144,18 @@ export default function AccountFormCompanyTransporterReceipt({
         initialValues={initialValues}
         onSubmit={async (values) => {
           const input = {
-            ...(transporterReceipt?.id ? { id: transporterReceipt.id } : {}),
+            ...(traderReceipt?.id ? { id: traderReceipt.id } : {}),
             ...values,
           };
-          const { data } = await createOrUpdateTransporterReceipt({
+          const { data } = await createOrUpdateTraderReceipt({
             variables: { input },
           });
-          if (data.createTransporterReceipt) {
+          console.log(data);
+          if (data.createTraderReceipt) {
             await updateCompany({
               variables: {
                 siret: company.siret,
-                transporterReceiptId: data.createTransporterReceipt.id,
+                traderReceiptId: data.createTraderReceipt.id,
               },
             });
           }
@@ -198,15 +199,15 @@ export default function AccountFormCompanyTransporterReceipt({
             {(updateOrCreateLoading ||
               deleteLoading ||
               updateCompanyLoading) && <div>Envoi en cours...</div>}
-            {transporterReceipt && (
+            {traderReceipt && (
               <button
                 className="button warning"
                 type="button"
                 disabled={props.isSubmitting}
                 onClick={async () => {
-                  await deleteTransporterReceipt({
+                  await deleteTraderReceipt({
                     variables: {
-                      input: { id: transporterReceipt.id },
+                      input: { id: traderReceipt.id },
                     },
                   });
                   toggleEdition();
@@ -220,7 +221,7 @@ export default function AccountFormCompanyTransporterReceipt({
               type="submit"
               disabled={props.isSubmitting}
             >
-              {transporterReceipt ? "Modifier" : "Créer"}
+              {traderReceipt ? "Modifier" : "Créer"}
             </button>
           </Form>
         )}

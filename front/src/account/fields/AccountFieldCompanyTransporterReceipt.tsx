@@ -30,18 +30,20 @@ export default function AccountFieldCompanyTransporterReceipt({
 }: Props) {
   const transporterReceipt = company.transporterReceipt ? (
     <table>
-      <tr>
-        <td> Numéro de récépissé </td>
-        <td>{company.transporterReceipt.receiptNumber} </td>
-      </tr>
-      <tr>
-        <td> Limite de validité </td>
-        <td>{formatDate(company.transporterReceipt.validityLimit)} </td>
-      </tr>
-      <tr>
-        <td> Département</td>
-        <td>{company.transporterReceipt.department} </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td> Numéro de récépissé </td>
+          <td>{company.transporterReceipt.receiptNumber} </td>
+        </tr>
+        <tr>
+          <td> Limite de validité </td>
+          <td>{formatDate(company.transporterReceipt.validityLimit)} </td>
+        </tr>
+        <tr>
+          <td> Département</td>
+          <td>{company.transporterReceipt.department} </td>
+        </tr>
+      </tbody>
     </table>
   ) : null;
 
