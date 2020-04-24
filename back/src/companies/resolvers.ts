@@ -17,6 +17,8 @@ import createTransporterReceipt from "./mutations/transporterReceipt/createTrans
 import createTraderReceipt from "./mutations/traderReceipt/createTraderReceipt";
 import updateTransporterReceipt from "./mutations/transporterReceipt/updateTransporterReceipt";
 import updateTraderReceipt from "./mutations/traderReceipt/updateTraderReceipt";
+import deleteTransporterReceipt from "./mutations/transporterReceipt/deleteTransporterReceipt";
+import deleteTraderReceipt from "./mutations/traderReceipt/deleteTraderReceipt";
 
 type FavoriteType = "EMITTER" | "TRANSPORTER" | "RECIPIENT" | "TRADER";
 
@@ -120,8 +122,10 @@ export default {
     createCompany: (_, { companyInput }, context: GraphQLContext) =>
       createCompany(companyInput, context.user),
     createTransporterReceipt: (_, { input }) => createTransporterReceipt(input),
-    createTraderReceipt: (_, { input }) => createTraderReceipt(input),
     updateTransporterReceipt: (_, { input }) => updateTransporterReceipt(input),
+    deleteTransporterReceipt: (_, { input }) => deleteTransporterReceipt(input),
+    deleteTraderReceipt: (_, { input }) => deleteTraderReceipt(input),
+    createTraderReceipt: (_, { input }) => createTraderReceipt(input),
     updateTraderReceipt: (_, { input }) => updateTraderReceipt(input),
     createUploadLink
   }

@@ -458,6 +458,36 @@ Supprime une invitation à un établissement
 <td></td>
 </tr>
 <tr>
+<td colspan="2" valign="top"><strong>deleteTraderReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+USAGE INTERNE
+Supprime un récépissé négociant
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">input</td>
+<td valign="top"><a href="#deletetraderreceiptinput">DeleteTraderReceiptInput</a></td>
+<td></td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>deleteTransporterReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+USAGE INTERNE
+Supprime un récépissé transporteur
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">input</td>
+<td valign="top"><a href="#deletetransporterreceiptinput">DeleteTransporterReceiptInput</a></td>
+<td></td>
+</tr>
+<tr>
 <td colspan="2" valign="top"><strong>duplicateForm</strong></td>
 <td valign="top"><a href="#form">Form</a></td>
 <td>
@@ -929,6 +959,24 @@ SIRET de l'établissement
 <td>
 
 (Optionnel) Nom d'usage de l'établissement
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">transporterReceiptId</td>
+<td valign="top"><a href="#string">String</a></td>
+<td>
+
+(Optionnel) Identifiant d'un récépissé transporteur
+
+</td>
+</tr>
+<tr>
+<td colspan="2" align="right" valign="top">traderReceiptId</td>
+<td valign="top"><a href="#string">String</a></td>
+<td>
+
+(Optionnel) Identifiant d'un récépissé négociant
 
 </td>
 </tr>
@@ -3623,6 +3671,56 @@ Limite de validatié du récépissé
 <td>
 
 Département ayant enregistré la déclaration
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### DeleteTraderReceiptInput
+
+Payload de suppression d'un récépissé négociant
+
+<table>
+<thead>
+<tr>
+<th colspan="2" align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" valign="top"><strong>id</strong></td>
+<td valign="top"><a href="#id">ID</a>!</td>
+<td>
+
+The id of the trader receipt to delete
+
+</td>
+</tr>
+</tbody>
+</table>
+
+### DeleteTransporterReceiptInput
+
+Payload de suppression d'un récépissé transporteur
+
+<table>
+<thead>
+<tr>
+<th colspan="2" align="left">Field</th>
+<th align="left">Type</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="2" valign="top"><strong>id</strong></td>
+<td valign="top"><a href="#id">ID</a>!</td>
+<td>
+
+The id of the transporter receipt to delete
 
 </td>
 </tr>

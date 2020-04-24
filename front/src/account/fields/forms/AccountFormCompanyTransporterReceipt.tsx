@@ -1,15 +1,13 @@
 import React from "react";
 import gql from "graphql-tag";
-import { TransporterReceipt } from "../../AccountCompany";
 import { useMutation } from "@apollo/react-hooks";
 import { Formik, FormikProps, Form, Field } from "formik";
-import styles from "./AccountFormCompanyTransporterReceipt.module.scss";
 import RedErrorMessage from "../../../common/RedErrorMessage";
+import { Company } from "../../AccountCompany";
+import { NotificationError } from "../../../common/Error";
 
 type Props = {
-  name: string;
-  siret: string;
-  transporterReceipt: TransporterReceipt;
+  company: Pick<Company, "id" | "siret" | "transporterReceipt">;
   toggleEdition: () => void;
 };
 
@@ -19,59 +17,200 @@ type V = {
   department: string;
 };
 
-export const UPDATE_TRANSPORTER_RECEIPT = gql`
+const UPDATE_TRANSPORTER_RECEIPT = gql`
   mutation UpdateTransporterReceipt($input: UpdateTransporterReceiptInput!) {
     updateTransporterReceipt(input: $input) {
+      id
+      receiptNumber
+      validityLimit
+      department
+    }
+  }
+`;
+
+const CREATE_TRANSPORTER_RECEIPT = gql`
+  mutation CreateTransporterReceipt($input: CreateTransporterReceiptInput!) {
+    createTransporterReceipt(input: $input) {
+      id
+      receiptNumber
+      validityLimit
+      department
+    }
+  }
+`;
+
+export const UPDATE_COMPANY_TRANSPORTER_RECEIPT = gql`
+  mutation UpdateCompany($siret: String!, $transporterReceiptId: String!) {
+    updateCompany(siret: $siret, transporterReceiptId: $transporterReceiptId) {
+      id
+      transporterReceipt {
+        id
+        receiptNumber
+        validityLimit
+        department
+      }
+    }
+  }
+`;
+
+export const DELETE_TRANSPORTER_RECEIPT = gql`
+  mutation DeleteCompany($input: DeleteTransporterReceiptInput!) {
+    deleteTransporterReceipt(input: $input) {
       id
     }
   }
 `;
 
+/**
+ * This component allows to create / edit / delete a transporter receipt
+ * @param param0
+ */
 export default function AccountFormCompanyTransporterReceipt({
-  transporterReceipt,
+  company,
   toggleEdition,
-}) {
-  const [update, { loading, error }] = useMutation(UPDATE_TRANSPORTER_RECEIPT, {
-    onCompleted: () => {
-      toggleEdition();
+}: Props) {
+  const transporterReceipt = company.transporterReceipt;
+
+  const [
+    createOrUpdateTransporterReceipt,
+    { loading: updateOrCreateLoading, error: updateOrCreateError },
+  ] = useMutation(
+    transporterReceipt ? UPDATE_TRANSPORTER_RECEIPT : CREATE_TRANSPORTER_RECEIPT
+  );
+
+  const [
+    updateCompany,
+    { loading: updateCompanyLoading, error: updateCompanyError },
+  ] = useMutation(UPDATE_COMPANY_TRANSPORTER_RECEIPT);
+
+  const [
+    deleteTransporterReceipt,
+    { loading: deleteLoading, error: deleteError },
+  ] = useMutation(DELETE_TRANSPORTER_RECEIPT, {
+    update(cache) {
+      cache.writeFragment({
+        id: company.id,
+        fragment: gql`
+          fragment TransporterReceiptCompanyFragment on CompanyPrivate {
+            id
+            transporterReceipt {
+              id
+            }
+          }
+        `,
+        data: { transporterReceipt: null, __typename: "CompanyPrivate" },
+      });
     },
   });
 
   const initialValues: V = {
-    receiptNumber: transporterReceipt.receiptNumber,
-    validityLimit: transporterReceipt.validityLimit,
-    department: transporterReceipt.department,
+    receiptNumber: "",
+    validityLimit: "",
+    department: "",
   };
 
+  if (transporterReceipt) {
+    const date = new Date(transporterReceipt.validityLimit);
+
+    // Format date to yyyy-MM-dd
+    // Cf https://stackoverflow.com/questions/3605214/javascript-add-leading-zeroes-to-date
+    const yyyy = date.getFullYear();
+    const mm = ("0" + (date.getMonth() + 1)).slice(-2);
+    const dd = ("0" + date.getDate()).slice(-2);
+    const dateStr = `${yyyy}-${mm}-${dd}`;
+
+    initialValues.receiptNumber = transporterReceipt.receiptNumber;
+    initialValues.validityLimit = dateStr;
+    initialValues.department = transporterReceipt.department;
+  }
+
   return (
-    <Formik initialValues={initialValues} onSubmit={() => {}}>
-      {(props: FormikProps<V>) => (
-        <Form>
-          <div className={styles.field__value}>
-            <div className={styles.field}>
-              <label className="text-right">Numéro de récépissé</label>
-              <div className={styles.field__value}>
-                <Field type="text" name="receiptNumber" />
-                <RedErrorMessage name="receiptNumber" />
-              </div>
-            </div>
-            <div className={styles.field}>
-              <label className="text-right">Limite de validité</label>
-              <div className={styles.field__value}>
-                <Field type="date" name="validityLimit" />
-                <RedErrorMessage name="validityLimit" />
-              </div>
-            </div>
-            <div className={styles.field}>
-              <label className="text-right">Département</label>
-              <div className={styles.field__value}>
-                <Field type="text" name="department" placeholder="75" />
-                <RedErrorMessage name="department" />
-              </div>
-            </div>
-          </div>
-        </Form>
+    <>
+      {updateOrCreateError && (
+        <NotificationError apolloError={updateOrCreateError} />
       )}
-    </Formik>
+
+      {updateCompanyError && (
+        <NotificationError apolloError={updateCompanyError} />
+      )}
+
+      {deleteError && <NotificationError apolloError={deleteError} />}
+      <Formik
+        initialValues={initialValues}
+        onSubmit={async (values) => {
+          const input = {
+            ...(transporterReceipt?.id ? { id: transporterReceipt.id } : {}),
+            ...values,
+          };
+          const { data } = await createOrUpdateTransporterReceipt({
+            variables: { input },
+          });
+          if (data.createTransporterReceipt) {
+            await updateCompany({
+              variables: {
+                siret: company.siret,
+                transporterReceiptId: data.createTransporterReceipt.id,
+              },
+            });
+          }
+          toggleEdition();
+        }}
+      >
+        {(props: FormikProps<V>) => (
+          <Form>
+            <div>
+              <div>
+                <label>Numéro de récépissé</label>
+                <div>
+                  <Field type="text" name="receiptNumber" />
+                  <RedErrorMessage name="receiptNumber" />
+                </div>
+              </div>
+              <div>
+                <label>Limite de validité</label>
+                <div>
+                  <Field type="date" name="validityLimit" />
+                  <RedErrorMessage name="validityLimit" />
+                </div>
+              </div>
+              <div>
+                <label>Département</label>
+                <div>
+                  <Field type="text" name="department" placeholder="75" />
+                  <RedErrorMessage name="department" />
+                </div>
+              </div>
+            </div>
+            {(updateOrCreateLoading ||
+              deleteLoading ||
+              updateCompanyLoading) && <div>Envoi en cours...</div>}
+            {transporterReceipt && (
+              <button
+                className="button warning"
+                type="button"
+                disabled={props.isSubmitting}
+                onClick={async () => {
+                  await deleteTransporterReceipt({
+                    variables: {
+                      input: { id: transporterReceipt.id },
+                    },
+                  });
+                  toggleEdition();
+                }}
+              >
+                Supprimer
+              </button>
+            )}
+            <button
+              className="button"
+              type="submit"
+              disabled={props.isSubmitting}
+            >
+              {transporterReceipt ? "Modifier" : "Créer"}
+            </button>
+          </Form>
+        )}
+      </Formik>
+    </>
   );
 }

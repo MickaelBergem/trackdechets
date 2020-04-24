@@ -12,7 +12,7 @@ import AccountCompanyList from "./AccountCompanyList";
 import AccountContentWrapper from "./AccountContentWrapper";
 import AccountCompanyAdd from "./AccountCompanyAdd";
 
-const GET_ME = gql`
+export const GET_ME = gql`
   {
     me {
       ...AccountInfoFragment

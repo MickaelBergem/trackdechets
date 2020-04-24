@@ -269,6 +269,18 @@ export type Declaration = {
   gerepType?: Maybe<GerepType>;
 };
 
+/** Payload de suppression d'un récépissé négociant */
+export type DeleteTraderReceiptInput = {
+  /** The id of the trader receipt to delete */
+  id: Scalars['ID'];
+};
+
+/** Payload de suppression d'un récépissé transporteur */
+export type DeleteTransporterReceiptInput = {
+  /** The id of the transporter receipt to delete */
+  id: Scalars['ID'];
+};
+
 export type Destination = {
    __typename?: 'Destination';
   /** N° de CAP (le cas échéant) */
@@ -631,6 +643,16 @@ export type Mutation = {
    * Supprime une invitation à un établissement
    */
   deleteInvitation?: Maybe<CompanyPrivate>;
+  /**
+   * USAGE INTERNE
+   * Supprime un récépissé négociant
+   */
+  deleteTraderReceipt?: Maybe<TransporterReceipt>;
+  /**
+   * USAGE INTERNE
+   * Supprime un récépissé transporteur
+   */
+  deleteTransporterReceipt?: Maybe<TransporterReceipt>;
   /** Duplique un BSD */
   duplicateForm?: Maybe<Form>;
   /**
@@ -757,6 +779,16 @@ export type MutationDeleteInvitationArgs = {
 };
 
 
+export type MutationDeleteTraderReceiptArgs = {
+  input?: Maybe<DeleteTraderReceiptInput>;
+};
+
+
+export type MutationDeleteTransporterReceiptArgs = {
+  input?: Maybe<DeleteTransporterReceiptInput>;
+};
+
+
 export type MutationDuplicateFormArgs = {
   id: Scalars['ID'];
 };
@@ -876,6 +908,8 @@ export type MutationUpdateCompanyArgs = {
   website?: Maybe<Scalars['String']>;
   companyTypes?: Maybe<Array<Maybe<CompanyType>>>;
   givenName?: Maybe<Scalars['String']>;
+  transporterReceiptId?: Maybe<Scalars['String']>;
+  traderReceiptId?: Maybe<Scalars['String']>;
 };
 
 

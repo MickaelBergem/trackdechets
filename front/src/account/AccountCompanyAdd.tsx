@@ -415,9 +415,7 @@ export default function AccountCompanyAdd() {
                 <h5 className={styles.subtitle}>Activité</h5>
 
                 <div className={styles.field}>
-                  <label className={`text-right ${styles.bold}`}>
-                    L'établissement est
-                  </label>
+                  <label className={`text-right ${styles.bold}`}>Profil</label>
                   <div className={styles.field__value}>
                     <Field name="companyTypes" component={CompanyType} />
 
@@ -483,7 +481,7 @@ export default function AccountCompanyAdd() {
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? <FaHourglassHalf /> : "Créer l'entreprise"}
+                    {isSubmitting ? <FaHourglassHalf /> : "Créer"}
                   </button>
                 </div>
                 {/* // ERRORS */}

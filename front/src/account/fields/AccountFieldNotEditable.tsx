@@ -13,13 +13,13 @@ export default function AccountFieldNotEditable({
   name,
   label,
   value,
-  tooltip
+  tooltip,
 }: Props) {
   const classes = [styles.field];
 
   return (
     <div className={classes.join(" ")}>
-      <label htmlFor={name}>
+      <label htmlFor={name} className="text-right">
         {label}
         {tooltip && <ToolTip msg={tooltip} />}
       </label>

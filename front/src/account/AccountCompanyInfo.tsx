@@ -15,6 +15,7 @@ type Props = { company: Company };
 AccountCompanyInfo.fragments = {
   company: gql`
     fragment AccountCompanyInfoFragment on CompanyPrivate {
+      id
       siret
       address
       naf
@@ -77,12 +78,14 @@ export default function AccountCompanyInfo({ company }: Props) {
       <AccountFieldCompanyTypes
         company={filter(AccountFieldCompanyTypes.fragments.company, company)}
       />
-      <AccountFieldCompanyTransporterReceipt
-        company={filter(
-          AccountFieldCompanyTransporterReceipt.fragments.company,
-          company
-        )}
-      />
+      {company.companyTypes.includes("TRANSPORTER") && (
+        <AccountFieldCompanyTransporterReceipt
+          company={filter(
+            AccountFieldCompanyTransporterReceipt.fragments.company,
+            company
+          )}
+        />
+      )}
       {company.userRole === UserRole.ADMIN ? (
         <AccountFieldCompanyGivenName
           company={filter(

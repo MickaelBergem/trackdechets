@@ -29,18 +29,21 @@ export type CompanyMember = {
 };
 
 export type TransporterReceipt = {
+  id: string;
   receiptNumber: string;
   validityLimit: string;
   department: string;
 };
 
 export type TraderReceipt = {
+  id: string;
   receiptNumber: string;
   validityLimit: string;
   department: string;
 };
 
 export type Company = {
+  id: string;
   name: string;
   siret: string;
   address: string;
