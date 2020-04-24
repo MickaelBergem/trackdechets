@@ -3,7 +3,13 @@ import gql from "graphql-tag";
 import { filter } from "graphql-anywhere";
 import { useQuery } from "@apollo/react-hooks";
 import AccountMenu from "./AccountMenu";
-import { Route, withRouter, RouteComponentProps } from "react-router";
+import {
+  Route,
+  withRouter,
+  RouteComponentProps,
+  useHistory,
+  useRouteMatch,
+} from "react-router";
 import Loader from "../common/Loader";
 import { InlineError } from "../common/Error";
 import AccountInfo from "./AccountInfo";
@@ -26,6 +32,8 @@ export const GET_ME = gql`
 `;
 
 export default withRouter(function Account({ match }: RouteComponentProps) {
+  const history = useHistory();
+
   const { loading, error, data } = useQuery(GET_ME);
 
   if (loading) return <Loader />;
@@ -56,7 +64,17 @@ export default withRouter(function Account({ match }: RouteComponentProps) {
           exact
           path={`${match.path}/companies`}
           render={() => (
-            <AccountContentWrapper title="Établissements">
+            <AccountContentWrapper
+              title="Établissements"
+              button={
+                <button
+                  className="button"
+                  onClick={() => history.push(`${match.path}/companies/new`)}
+                >
+                  Créer un établissement
+                </button>
+              }
+            >
               <AccountCompanyList
                 companies={filter(
                   AccountCompanyList.fragments.company,

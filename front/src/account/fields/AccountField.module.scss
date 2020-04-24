@@ -29,11 +29,7 @@
     width: 100%;
   }
 
-  input[type="text"] {
-    width: 300px;
-  }
-
-  input[type="date"] {
+  input:not([type="checkbox"]) {
     width: 300px;
   }
 }

@@ -39,11 +39,7 @@
     margin: 0.5em;
   }
 
-  input[type="text"] {
-    width: 300px;
-  }
-
-  input[type="date"] {
+  input:not([type="checkbox"]) {
     width: 300px;
   }
 
