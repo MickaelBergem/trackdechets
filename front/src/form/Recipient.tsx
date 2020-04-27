@@ -2,7 +2,7 @@ import { Field, useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import RedErrorMessage from "../common/RedErrorMessage";
 import CompanySelector from "./company/CompanySelector";
-import DateInput from "./custom-inputs/DateInput";
+import DateInput from "../common/DateInput";
 import initialState from "./initial-state";
 import { Form } from "./model";
 import ProcessingOperation from "./processing-operation/ProcessingOperation";
@@ -48,7 +48,23 @@ export default function Recipient() {
         </p>
       </div>
 
-      <CompanySelector name="recipient.company" />
+      <CompanySelector
+        name="trader.company"
+        onCompanySelected={(trader) => {
+          if (trader.traderReceipt) {
+            setFieldValue("trader.receipt", trader.traderReceipt.receiptNumber);
+            setFieldValue(
+              "trader.validityLimit",
+              new Date(trader.traderReceipt.validityLimit)
+            );
+            setFieldValue("trader.department", trader.traderReceipt.department);
+          } else {
+            setFieldValue("trader.receipt", "");
+            setFieldValue("trader.validityLimit", "");
+            setFieldValue("trader.department", "");
+          }
+        }}
+      />
 
       <h4>Informations complémentaires</h4>
 

@@ -41,25 +41,6 @@ function init(selectedCompany) {
   };
 }
 
-function reducer(state, action) {
-  switch (action.type) {
-    case "search_input":
-      return { ...state, clue: action.payload };
-    case "department_filter":
-      return { ...state, displayDepartment: action.payload };
-    case "department_input":
-      return { ...state, department: action.payload };
-    case "search_change":
-      return { ...state, ...action.payload };
-    case "company_selected":
-      return { ...state, selectedCompany: action.payload };
-    case "reset":
-      return init(action.payload);
-    default:
-      throw new Error();
-  }
-}
-
 export default function CompanySelector(props) {
   const [field] = useField(props);
   const { setFieldValue } = useFormikContext();
@@ -68,6 +49,29 @@ export default function CompanySelector(props) {
     searchCompaniesQuery,
     { loading: searchLoading, data: searchData },
   ] = useLazyQuery(SEARCH_COMPANIES);
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case "search_input":
+        return { ...state, clue: action.payload };
+      case "department_filter":
+        return { ...state, displayDepartment: action.payload };
+      case "department_input":
+        return { ...state, department: action.payload };
+      case "search_change":
+        return { ...state, ...action.payload };
+      case "company_selected": {
+        if (props.onCompanySelected) {
+          props.onCompanySelected(action.payload);
+        }
+        return { ...state, selectedCompany: action.payload };
+      }
+      case "reset":
+        return init(action.payload);
+      default:
+        throw new Error();
+    }
+  }
 
   useEffect(() => {
     dispatch({
