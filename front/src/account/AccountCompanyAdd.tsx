@@ -370,7 +370,7 @@ export default function AccountCompanyAdd() {
 
                 <div className={styles.field}>
                   <label className={`text-right ${styles.bold}`}>
-                    Code NAF (optionnel)
+                    Code NAF
                   </label>
                   <div className={styles.field__value}>
                     <Field type="text" name="codeNaf" />
@@ -378,9 +378,7 @@ export default function AccountCompanyAdd() {
                 </div>
 
                 <div className={styles.field}>
-                  <label className={`text-right ${styles.bold}`}>
-                    Adresse (optionnel)
-                  </label>
+                  <label className={`text-right ${styles.bold}`}>Adresse</label>
                   <div className={styles.field__value}>
                     <Field type="text" name="address" />
                   </div>
