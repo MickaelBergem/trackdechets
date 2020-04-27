@@ -1158,6 +1158,24 @@ Email de contact
 
 </td>
 </tr>
+<tr>
+<td colspan="2" valign="top"><strong>transporterReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+Récépissé transporteur associé à cet établissement (le cas échéant)
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>traderReceipt</strong></td>
+<td valign="top"><a href="#traderreceipt">TraderReceipt</a></td>
+<td>
+
+Récépissé négociant associé à cet établissement (le cas échant)
+
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -1572,6 +1590,24 @@ Si oui on non cet établissement est inscrit sur la plateforme Trackdéchets
 
 </td>
 </tr>
+<tr>
+<td colspan="2" valign="top"><strong>transporterReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+Récépissé transporteur associé à cet établissement (le cas échéant)
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>traderReceipt</strong></td>
+<td valign="top"><a href="#traderreceipt">TraderReceipt</a></td>
+<td>
+
+Récépissé négociant associé à cet établissement (le cas échant)
+
+</td>
+</tr>
 </tbody>
 </table>
 
@@ -1668,6 +1704,24 @@ Latitude de l'établissement (info géographique)
 
 Installation classée pour la protection de l'environnement (ICPE)
 associé à cet établissement
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>transporterReceipt</strong></td>
+<td valign="top"><a href="#transporterreceipt">TransporterReceipt</a></td>
+<td>
+
+Récépissé transporteur associé à cet établissement (le cas échéant)
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><strong>traderReceipt</strong></td>
+<td valign="top"><a href="#traderreceipt">TraderReceipt</a></td>
+<td>
+
+Récépissé négociant associé à cet établissement (le cas échant)
 
 </td>
 </tr>

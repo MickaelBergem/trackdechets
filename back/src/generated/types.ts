@@ -50,6 +50,10 @@ export type CompanyFavorite = {
   phone?: Maybe<Scalars['String']>;
   /** Email de contact */
   mail?: Maybe<Scalars['String']>;
+  /** Récépissé transporteur associé à cet établissement (le cas échéant) */
+  transporterReceipt?: Maybe<TransporterReceipt>;
+  /** Récépissé négociant associé à cet établissement (le cas échant) */
+  traderReceipt?: Maybe<TraderReceipt>;
 };
 
 /** Payload d'un établissement */
@@ -170,6 +174,10 @@ export type CompanyPublic = {
   installation?: Maybe<Installation>;
   /** Si oui on non cet établissement est inscrit sur la plateforme Trackdéchets */
   isRegistered?: Maybe<Scalars['Boolean']>;
+  /** Récépissé transporteur associé à cet établissement (le cas échéant) */
+  transporterReceipt?: Maybe<TransporterReceipt>;
+  /** Récépissé négociant associé à cet établissement (le cas échant) */
+  traderReceipt?: Maybe<TraderReceipt>;
 };
 
 /** Information sur un établissement accessible publiquement en recherche */
@@ -196,6 +204,10 @@ export type CompanySearchResult = {
    * associé à cet établissement
    */
   installation?: Maybe<Installation>;
+  /** Récépissé transporteur associé à cet établissement (le cas échéant) */
+  transporterReceipt?: Maybe<TransporterReceipt>;
+  /** Récépissé négociant associé à cet établissement (le cas échant) */
+  traderReceipt?: Maybe<TraderReceipt>;
 };
 
 /** Statistiques d'un établissement */
