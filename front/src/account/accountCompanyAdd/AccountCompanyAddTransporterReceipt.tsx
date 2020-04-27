@@ -2,6 +2,7 @@ import React from "react";
 import { Field } from "formik";
 import RedErrorMessage from "../../common/RedErrorMessage";
 import styles from "../AccountCompanyAdd.module.scss";
+import DateInput from "../../form/custom-inputs/DateInput";
 
 /**
  * Transporter receipt Formik fields for company creation
@@ -25,7 +26,10 @@ export default function AccountCompanyAddTransporterReceipt() {
             <tr>
               <td>Limite de validité</td>
               <td>
-                <Field type="date" name="transporterReceiptValidity" />
+                <Field
+                  name="transporterReceiptValidity"
+                  component={DateInput}
+                />
                 <RedErrorMessage name="transporterReceiptValidity" />
               </td>
             </tr>

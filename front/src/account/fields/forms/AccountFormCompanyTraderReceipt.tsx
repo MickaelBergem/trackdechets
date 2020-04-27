@@ -5,6 +5,7 @@ import { Formik, FormikProps, Form, Field } from "formik";
 import RedErrorMessage from "../../../common/RedErrorMessage";
 import { Company } from "../../AccountCompany";
 import { NotificationError } from "../../../common/Error";
+import DateInput from "../../../common/DateInput";
 
 type Props = {
   company: Pick<Company, "id" | "siret" | "traderReceipt">;
@@ -62,20 +63,6 @@ export const DELETE_TRADER_RECEIPT = gql`
 `;
 
 /**
- * Format date to yyyy-MM-dd
- * @param d
- */
-export function formatDate(d: string) {
-  const date = new Date(d);
-
-  // Cf https://stackoverflow.com/questions/3605214/javascript-add-leading-zeroes-to-date
-  const yyyy = date.getFullYear();
-  const mm = ("0" + (date.getMonth() + 1)).slice(-2);
-  const dd = ("0" + date.getDate()).slice(-2);
-  return `${yyyy}-${mm}-${dd}`;
-}
-
-/**
  * This component allows to create / edit / delete a trader receipt
  * @param param0
  */
@@ -120,7 +107,7 @@ export default function AccountFormCompanyTransporterReceipt({
   const initialValues: V = traderReceipt
     ? {
         receiptNumber: traderReceipt.receiptNumber,
-        validityLimit: formatDate(traderReceipt.validityLimit),
+        validityLimit: traderReceipt.validityLimit,
         department: traderReceipt.department,
       }
     : {
@@ -150,7 +137,6 @@ export default function AccountFormCompanyTransporterReceipt({
           const { data } = await createOrUpdateTraderReceipt({
             variables: { input },
           });
-          console.log(data);
           if (data.createTraderReceipt) {
             await updateCompany({
               variables: {
@@ -183,7 +169,7 @@ export default function AccountFormCompanyTransporterReceipt({
                 <tr>
                   <td>Limite de validité</td>
                   <td>
-                    <Field type="date" name="validityLimit" />
+                    <Field name="validityLimit" component={DateInput} />
                     <RedErrorMessage name="validityLimit" />
                   </td>
                 </tr>

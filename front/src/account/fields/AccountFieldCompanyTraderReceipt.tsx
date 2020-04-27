@@ -2,9 +2,8 @@ import React from "react";
 import gql from "graphql-tag";
 import AccountField from "./AccountField";
 import { Company } from "../AccountCompany";
-import AccountFormCompanyTraderReceipt, {
-  formatDate,
-} from "./forms/AccountFormCompanyTraderReceipt";
+import AccountFormCompanyTraderReceipt from "./forms/AccountFormCompanyTraderReceipt";
+import { formatDate } from "../../common/helper";
 
 type Props = {
   company: Pick<Company, "id" | "siret" | "traderReceipt">;
@@ -35,7 +34,7 @@ export default function AccountFieldCompanyTraderReceipt({ company }: Props) {
         </tr>
         <tr>
           <td> Limite de validité </td>
-          <td>{formatDate(company.traderReceipt.validityLimit)} </td>
+          <td>{formatDate(new Date(company.traderReceipt.validityLimit))} </td>
         </tr>
         <tr>
           <td> Département</td>
