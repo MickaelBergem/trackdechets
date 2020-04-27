@@ -22,6 +22,14 @@ import deleteTraderReceipt from "./mutations/traderReceipt/deleteTraderReceipt";
 
 type FavoriteType = "EMITTER" | "TRANSPORTER" | "RECIPIENT" | "TRADER";
 
+// lookup for transporter and trader receipt in db
+const receiptsResolvers = {
+  transporterReceipt: parent =>
+    prisma.company({ siret: parent.siret }).transporterReceipt(),
+  traderReceipt: parent =>
+    prisma.company({ siret: parent.siret }).traderReceipt()
+};
+
 export default {
   CompanyPrivate: {
     users: parent => {
@@ -31,9 +39,16 @@ export default {
       const userId = context.user.id;
       return getUserRole(userId, parent.siret);
     },
-    transporterReceipt: parent =>
-      prisma.company({ id: parent.id }).transporterReceipt(),
-    traderReceipt: parent => prisma.company({ id: parent.id }).traderReceipt()
+    ...receiptsResolvers
+  },
+  CompanyPublic: {
+    ...receiptsResolvers
+  },
+  CompanyFavorite: {
+    ...receiptsResolvers
+  },
+  CompanySearchResult: {
+    ...receiptsResolvers
   },
   CompanyMember: {
     isMe: (parent, _, context: GraphQLContext) => {

@@ -267,6 +267,16 @@ type CompanyPublic {
   Si oui on non cet établissement est inscrit sur la plateforme Trackdéchets
   """
   isRegistered: Boolean
+
+  """
+  Récépissé transporteur associé à cet établissement (le cas échéant)
+  """
+  transporterReceipt: TransporterReceipt
+
+  """
+  Récépissé négociant associé à cet établissement (le cas échant)
+  """
+  traderReceipt: TraderReceipt
 }
 
 "Information sur un établissement accessible publiquement en recherche"
@@ -300,6 +310,16 @@ type CompanySearchResult {
   associé à cet établissement
   """
   installation: Installation
+
+  """
+  Récépissé transporteur associé à cet établissement (le cas échéant)
+  """
+  transporterReceipt: TransporterReceipt
+
+  """
+  Récépissé négociant associé à cet établissement (le cas échant)
+  """
+  traderReceipt: TraderReceipt
 }
 
 """
@@ -325,6 +345,16 @@ type CompanyFavorite {
 
   "Email de contact"
   mail: String
+
+  """
+  Récépissé transporteur associé à cet établissement (le cas échéant)
+  """
+  transporterReceipt: TransporterReceipt
+
+  """
+  Récépissé négociant associé à cet établissement (le cas échant)
+  """
+  traderReceipt: TraderReceipt
 }
 
 """
