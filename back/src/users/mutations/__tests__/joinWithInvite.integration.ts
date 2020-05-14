@@ -1,6 +1,6 @@
 import { resetDatabase } from "../../../../integration-tests/helper";
 import { createTestClient } from "apollo-server-integration-testing";
-import { server } from "../../../server";
+import { server } from "../../../apollo";
 import { prisma } from "../../../generated/prisma-client";
 import { getCompanyUsers } from "../../../companies/queries";
 import * as mailsHelper from "../../../common/mails.helper";

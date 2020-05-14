@@ -1,5 +1,5 @@
 import { createTestClient } from "apollo-server-integration-testing";
-import { server } from "../server";
+import { server } from "../apollo";
 
 /**
  * Instatiate test client and return a mutate helper for an authenticated user

@@ -1,7 +1,7 @@
 import { createTestClient } from "apollo-server-integration-testing";
 import { resetDatabase } from "../../../../integration-tests/helper";
 import { prisma } from "../../../generated/prisma-client";
-import { server } from "../../../server";
+import { server } from "../../../apollo";
 import {
   formFactory,
   userWithCompanyFactory,
@@ -73,7 +73,7 @@ describe("Integration / Mark as signed mutation", () => {
           packagings: ${form.wasteDetailsPackagings}
           quantity: ${form.wasteDetailsQuantity}
           ${onuCodeParam}
-          
+
         }) {
           id
         }

@@ -36,7 +36,7 @@ describe("Error handling", () => {
 
   test("errors should be null if query resolve correctly", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockResolvedValueOnce("world");
     const { errors, data } = await query({ query: HELLO });
@@ -46,7 +46,7 @@ describe("Error handling", () => {
 
   test("subclasses of Apollo errors should be formatted correctly when thrown", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       throw new UserInputError("Oups");
@@ -60,7 +60,7 @@ describe("Error handling", () => {
 
   test("subclasses of Apollo errors should be formatted correctly when returned", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       return new UserInputError("Oups");
@@ -74,7 +74,7 @@ describe("Error handling", () => {
 
   test("the message of generic Apollo errors without code should be masked", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       throw new ApolloError("Bang");
@@ -89,7 +89,7 @@ describe("Error handling", () => {
 
   test("the message of unhandled errors thrown should be masked", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       readFileSync("path/does/not/exist");
@@ -104,7 +104,7 @@ describe("Error handling", () => {
 
   test("the message of unhandled error returned should be masked", async () => {
     process.env.NODE_ENV = "production";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       return readFileSync("path/does/not/exist");
@@ -119,7 +119,7 @@ describe("Error handling", () => {
 
   test("unhandled errors message should be displayed in dev", async () => {
     process.env.NODE_ENV = "dev";
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       throw new Error("Bang");
@@ -132,7 +132,7 @@ describe("Error handling", () => {
   });
 
   test("Yup validation errors should be displayed as an input error", async () => {
-    const server = require("../server").server;
+    const server = require("../apollo").server;
     const { query } = createTestClient(server);
     mockHello.mockImplementationOnce(() => {
       throw new ValidationError("Bang", "Wrong value", "path");

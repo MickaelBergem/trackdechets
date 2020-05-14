@@ -1,5 +1,5 @@
 import * as mailsHelper from "../../../common/mails.helper";
-import { server } from "../../../server";
+import { server } from "../../../apollo";
 import { createTestClient } from "apollo-server-integration-testing";
 import { resetDatabase } from "../../../../integration-tests/helper";
 import { prisma } from "../../../generated/prisma-client";

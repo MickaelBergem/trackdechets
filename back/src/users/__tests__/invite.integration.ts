@@ -1,8 +1,6 @@
 import { prisma } from "../../generated/prisma-client";
 import { createUserAccountHash } from "../mutations/createUserAccountHash";
 
-import { server } from "../../server";
-import { createTestClient } from "apollo-server-integration-testing";
 import { userFactory, userWithCompanyFactory } from "../../__tests__/factories";
 import { escape } from "querystring";
 import axios from "axios";

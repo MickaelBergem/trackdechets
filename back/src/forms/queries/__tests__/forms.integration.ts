@@ -1,7 +1,7 @@
 import { createTestClient } from "apollo-server-integration-testing";
 import { resetDatabase } from "../../../../integration-tests/helper";
 import { prisma } from "../../../generated/prisma-client";
-import { server } from "../../../server";
+import { server } from "../../../apollo";
 import {
   companyFactory,
   formFactory,
