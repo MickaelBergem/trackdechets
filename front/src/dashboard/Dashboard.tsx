@@ -12,6 +12,7 @@ import Exports from "./exports/Exports";
 import SlipsContainer from "./slips/SlipsContainer";
 import Transport from "./transport/Transport";
 import { Query } from "../generated/graphql/types";
+import Stats from "./stats/Stats";
 
 export const GET_ME = gql`
   {
@@ -75,6 +76,7 @@ export default function Dashboard() {
             path={`${match.path}/transport`}
             render={() => <Transport me={data.me} siret={activeSiret} />}
           />
+          <Route exact path={`${match.path}/stats`} render={() => <Stats />} />
           <Route
             path={`${match.path}/exports`}
             render={() => <Exports me={data.me} />}

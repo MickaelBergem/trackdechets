@@ -60,6 +60,11 @@ export default function DashboardMenu({
                 Registre
               </NavLink>
             </li>
+            <li>
+              <NavLink to={`${match.url}/stats`} activeClassName="active">
+                Statistiques
+              </NavLink>
+            </li>
           </ul>
         </>
       </SideMenu>
