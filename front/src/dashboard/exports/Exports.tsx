@@ -1,9 +1,6 @@
 import gql from "graphql-tag";
 import React, { useState } from "react";
-import DownloadFileLink from "../../common/DownloadFileLink";
 import { User } from "../../generated/graphql/types";
-import ExportsWizard from "./ExportsWizard";
-import Modal from "../../common/Modal";
 import { FormsRegisterExportType, Maybe } from "../../generated/graphql/types";
 
 interface IProps {
@@ -47,27 +44,6 @@ export default function Exports({ me }: IProps) {
         format UTF-8. Assurez vous que vous l'ouvrez dans le bon format pour
         éviter les problèmes d'accents.
       </p>
-      <button
-        className="button"
-        onClick={() => openWizard(FormsRegisterExportType.Incoming)}
-      >
-        Registre de déchets entrants
-      </button>
-      <button
-        className="button"
-        onClick={() => openWizard(FormsRegisterExportType.Outgoing)}
-      >
-        Registre de déchets sortants
-      </button>
-
-      {exportType && (
-        <Modal display={displayWizard} close={() => closeWizard()}>
-          <ExportsWizard
-            exportType={exportType}
-            onCancel={() => closeWizard()}
-          />
-        </Modal>
-      )}
 
       {/* {companies.length > 1 && (
         <p>
