@@ -1,5 +1,6 @@
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
+import { filter } from "graphql-anywhere";
 import React, { useState } from "react";
 import { Redirect, Route } from "react-router";
 import { useRouteMatch } from "react-router-dom";
@@ -24,9 +25,11 @@ export const GET_ME = gql`
         givenName
         siret
         companyTypes
+        ...ExportsCompanyFragment
       }
     }
   }
+  ${Exports.fragments.company}
 `;
 
 export default function Dashboard() {
@@ -79,7 +82,11 @@ export default function Dashboard() {
           <Route exact path={`${match.path}/stats`} render={() => <Stats />} />
           <Route
             path={`${match.path}/exports`}
-            render={() => <Exports me={data.me} />}
+            render={() => (
+              <Exports
+                companies={filter(Exports.fragments.company, companies)}
+              />
+            )}
           />
         </div>
       </div>

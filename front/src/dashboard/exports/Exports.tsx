@@ -1,11 +1,21 @@
 import gql from "graphql-tag";
-import React, { useState } from "react";
-import { User } from "../../generated/graphql/types";
-import { FormsRegisterExportType, Maybe } from "../../generated/graphql/types";
+import React from "react";
+import { CompanyPrivate } from "../../generated/graphql/types";
+import ExportsForm from "./ExportsForm";
+import { filter } from "graphql-anywhere";
 
 interface IProps {
-  me: User;
+  companies: CompanyPrivate[];
 }
+
+Exports.fragments = {
+  company: gql`
+    fragment ExportsCompanyFragment on CompanyPrivate {
+      ...ExportsFormCompanyFragment
+    }
+    ${ExportsForm.fragments.company}
+  `,
+};
 
 const FORMS_REGISTER = gql`
   query FormsRegister($sirets: [String], $exportType: FormsRegisterExportType) {
@@ -15,36 +25,19 @@ const FORMS_REGISTER = gql`
   }
 `;
 
-export default function Exports({ me }: IProps) {
-  const companies = me.companies || [];
-
-  const [sirets, setSirets] = useState(companies.map((c) => c.siret));
-
-  const [displayWizard, setDisplayWizard] = useState(false);
-  const [exportType, setExportType] = useState<Maybe<FormsRegisterExportType>>(
-    null
-  );
-
-  function closeWizard() {
-    setDisplayWizard(false);
-    setExportType(null);
-  }
-
-  function openWizard(exportType: FormsRegisterExportType) {
-    setDisplayWizard(true);
-    setExportType(exportType);
-  }
-
+export default function Exports({ companies }: IProps) {
   return (
-    <div className="main">
-      <h2>Registre</h2>
-      <p>
+    <div className="tw-p-6">
+      <h2>Exporter un registre</h2>
+      <p className="notification success">
         Vous avez la possibilité de télécharger un registre des déchets entrants
         et sortants de votre entreprise. Cet export est un document CSV au
         format UTF-8. Assurez vous que vous l'ouvrez dans le bon format pour
         éviter les problèmes d'accents.
       </p>
-
+      <ExportsForm
+        companies={filter(ExportsForm.fragments.company, companies)}
+      />
       {/* {companies.length > 1 && (
         <p>
           Pour quelle entreprise(s) souhaitez vous télécharger le registre ?{" "}
