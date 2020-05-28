@@ -94,6 +94,15 @@ async function deleteAccounts() {
     });
   });
 
+  const accessTokens = await prisma.accessTokens({
+    where: { user: { id_in: users.map(u => u.id) } }
+  });
+  console.log("AccessToken");
+  accessTokens.forEach(token => {
+    console.log(token.id);
+  });
+  console.log("#################");
+
   console.log("UserAccountHashe");
   invitedUsers.forEach(user => console.log(user.email));
   console.log("#################");
@@ -130,6 +139,7 @@ async function deleteAccounts() {
   const forms = await prisma.forms({
     where: {
       OR: [
+        { owner: { id_in: users.map(u => u.id) } },
         { emitterCompanySiret_in: sirets },
         { recipientCompanySiret_in: sirets },
         { traderCompanySiret_in: sirets },
@@ -152,6 +162,33 @@ async function deleteAccounts() {
   formOwners.forEach(owner => {
     console.log(owner.email);
   });
+
+  // Status Logs
+  const statusLogs = await prisma.statusLogs({
+    where: {
+      OR: [
+        {
+          form: {
+            id_in: forms.map(f => f.id)
+          }
+        },
+        { user: { id_in: users.map(u => u.id) } }
+      ]
+    }
+  });
+
+  console.log("StatusLog");
+  statusLogs.forEach(l => {
+    console.log(l.id);
+  });
+  console.log("##############");
+
+  // delete status logs
+  const deletedStatusLogs = await prisma.deleteManyStatusLogs({
+    id_in: statusLogs.map(l => l.id)
+  });
+
+  console.log(`Deleted ${deletedStatusLogs.count} StatusLog`);
 
   // delete forms
   const deletedFormsPromises = forms.map(async form => {
@@ -194,7 +231,14 @@ async function deleteAccounts() {
 
   console.log(`Deleted ${deletedCompanyAssociation.count} CompanyAssociation`);
 
-  // delete users
+  // delete access tokens
+  const deletedAccessTokens = await prisma.deleteManyAccessTokens({
+    id_in: accessTokens.map(t => t.id)
+  });
+
+  console.log(`Deleted ${deletedAccessTokens.count} AccessToken`);
+
+  // delete users;
   const deletedUsers = await prisma.deleteManyUsers({
     id_in: users.map(u => u.id)
   });
